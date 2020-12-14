@@ -1,0 +1,88 @@
+/* Program3.lpp
+ * William Cary
+ * Program 3, Compilers
+ * October 18, 2020
+ * FlexLexer (flex scanner)
+*/
+
+%{
+  #include <iostream>
+  #include <iomanip>
+  #include <string>
+  #include <vector>
+  #include "Node.hpp"
+  #include "program5.tab.hpp"
+
+  using std::vector;
+  using std::string;
+  using std::cout;
+  using std::cerr;
+  using std::endl;
+
+%}
+
+%option outfile="program5_lex.cpp"
+%option noyywrap
+%option yylineno
+
+SPACE   [ \t]
+INT     "int"
+NUM     [0-9]+
+ID      [a-zA-Z_][a-zA-Z0-9_]*
+THIS    "this"
+DOT     "."
+CLASS   "class"
+
+%x MULTI_COMMENT
+
+%%
+"/*"      {BEGIN(MULTI_COMMENT);}
+<MULTI_COMMENT>"*/" {BEGIN(INITIAL);}
+<MULTI_COMMENT>"\n" {}
+<MULTI_COMMENT>.    {}
+"//".*"\n"     {}
+{INT}     {return INT;}
+{CLASS}   {return CLASS;}
+{THIS}    {return THIS;}
+","       {return COMMA;}
+"{"       {return LBRACK;}
+"}"       {return RBRACK;}
+"("       {return LPARAM;}
+")"       {return RPARAM;}
+";"       {return SEMI;}
+"["       {return OSB;}
+"]"       {return CSB;}
+"null"    {return NLL;}
+"read"    {return READ;}
+"void"    {return VOID;}
+"print"   {return PRINT;}
+"while"   {return WHILE;}
+"if"      {return IF;}
+"else"    {return ELSE;}
+"return"  {return RET;}
+"new"     {return NEW;}
+"=="      {return EQUAL;}
+"+"       {return ADD;}
+"-"       {return SUB;}
+"*"       {return MUL;}
+"/"       {return DIV;}
+"%"       {return MOD;}
+"&&"      {return COND_AND;}
+"||"      {return COND_OR;}
+"<"       {return LT;}
+">"       {return GT;}
+"<="      {return LE;}
+">="      {return GE;}
+"!="      {return NOT_EQUAL;}
+"!"       {return NOT;}
+"="       {return EQ;}
+{DOT}     {return DOT;}
+{NUM}     {yylval.nt = new Node(strdup(yytext)); return NUM;}
+{ID}      {yylval.nt = new Node(strdup(yytext)); return ID;}
+"\n"      {}
+.       {}
+
+%%
+
+
+

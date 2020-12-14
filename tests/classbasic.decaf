@@ -1,0 +1,10 @@
+class x {
+  void fast(){
+      return x < y;
+      return x == true;
+      return x > y;
+      return x != 2;
+      return x + 2;
+      return -(x - 2 + 3);
+  }
+}

@@ -1,0 +1,14 @@
+class A {
+  int f;
+}
+
+class C {
+  int a;
+  int b;
+  int c;
+  A test;
+  C(){
+    test.f = 2;
+    test = 2;
+  }
+}

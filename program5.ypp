@@ -1,0 +1,414 @@
+/*
+* Program4.ypp
+* William Cary
+* Program 4, Compilers
+* Nov 1, 2020
+* Bison file
+*/
+
+%{
+  #include <iostream>
+  #include <string>
+  #include <vector>
+  #include <FlexLexer.h>
+  #include "Node.hpp"
+
+  using std::vector;
+  using std::string;
+  using std::cout;
+  using std::cerr;
+  using std::endl;
+
+  extern Root tree;
+  extern yyFlexLexer scanner;
+  #define yylex() scanner.yylex()
+  #define YYERROR_VERBOSE 1
+  void yyerror(const char*);
+
+%}
+
+%union {
+  Node * nt;
+}
+%expect 1
+
+%type<nt> program classdec classbody parameterlist constructors parameter 
+%type<nt>  var_declarations method_declarations method_declaration construct type simpletype
+%type<nt> block localvardecs statements localvardec statement expression name arglist
+%type<nt> newexp newoexpc unaryop nameNoThis multibrackets elementAccess
+%token<nt> ID NUM
+%token CLASS RBRACK LBRACK INT COMMA THIS DOT LPARAM RPARAM SEMI  CSB VOID PRINT
+%token ELSE WHILE RET IF OSB NLL READ NEW MUL DIV ADD MOD SUB COND_AND COND_OR
+%token NOT
+%precedence RPARAM
+%precedence ELSE
+%left EQUAL NOT_EQUAL LT GT LE GE
+%left ADD SUB COND_OR
+%left MUL DIV MOD COND_AND 
+%precedence UNARY
+%token EQ
+%%
+program:
+  program classdec {
+    tree.push_back($2);
+  }
+  | classdec {
+    tree.push_back($1);
+  }
+;
+
+classdec:
+  CLASS ID classbody {
+    $$ = new ClassDec($2->getIdent(), $3);
+  }
+;
+
+classbody:
+  LBRACK var_declarations constructors method_declarations RBRACK {
+      $$ = new ClassBody($2, $3, $4);
+    }
+  | LBRACK var_declarations constructors RBRACK {
+      $$ = new ClassBody($2, $3, new NodeList());
+  }
+  | LBRACK var_declarations method_declarations RBRACK {
+      $$ = new ClassBody($2, new NodeList(), $3);
+  }
+  | LBRACK constructors method_declarations RBRACK {
+      $$ = new ClassBody(new NodeList(), $2, $3);
+  }
+  | LBRACK var_declarations RBRACK {
+      $$ = new ClassBody($2, new NodeList(), new NodeList());
+  }
+  | LBRACK constructors RBRACK {
+      $$ = new ClassBody(new NodeList(), $2, new NodeList());
+  }
+  | LBRACK method_declarations RBRACK {
+      $$ = new ClassBody(new NodeList(), new NodeList(), $2);
+  }
+  | LBRACK RBRACK {
+      $$ = new ClassBody(new NodeList(), new NodeList(), new NodeList());
+  }
+;
+
+var_declarations:
+  type ID SEMI
+  {
+    $$ = new NodeList();
+    $$->push_back(new VarDec($1, $2->getIdent()));
+  }
+  | var_declarations type ID SEMI {
+      $1->push_back(new VarDec($2, $3->getIdent()));
+      $$ = $1;
+  }
+  | error  SEMI  { yyerror("Missing semicolon"); yyerrok;}
+  | error RBRACK { yyerror("Missing semicolon"); yyerrok;}
+;
+
+constructors:
+  construct
+  {
+    $$ = new NodeList();
+    $$->push_back($1);
+  }
+  | constructors construct {
+    $1->push_back($2);
+    $$ = $1;
+  }
+;
+
+construct:
+  ID LPARAM RPARAM block {
+      $$ = new ConstrDec($1->getIdent(), new ParamList(), $4); 
+  }
+  | ID LPARAM parameterlist RPARAM block {
+      $$ = new ConstrDec($1->getIdent(), $3, $5);
+  }
+  | error block { yyerror("Syntax constructor error"); yyerrok;}
+;
+
+method_declarations:
+  method_declaration
+  {
+    $$ = new NodeList();
+    $$->push_back($1);
+  }
+  | method_declarations method_declaration {
+    $1->push_back($2);
+    $$ = $1;
+  }
+;
+
+method_declaration:
+  type ID LPARAM RPARAM block {
+      $$ = new MethodDec(new ResultType($1), $2->getIdent(), new ParamList(), $5);
+  }
+  | VOID ID LPARAM RPARAM block {
+      $$ = new MethodDec(new ResultType(), $2->getIdent(), new ParamList(), $5);
+  }
+  | type ID LPARAM parameterlist RPARAM block{
+      $$ = new MethodDec(new ResultType($1), $2->getIdent(), $4, $6);
+  }
+  | VOID ID LPARAM parameterlist RPARAM block {
+      $$ = new MethodDec(new ResultType(), $2->getIdent(), $4, $6);
+  }
+  | type error block { yyerror("Missing semicolon"); yyerrok;}
+  | VOID error block { yyerror("Missing semicolon"); yyerrok;}
+;
+parameterlist:
+  parameter {
+    $$ = new ParamList();
+    $$->push_back($1);
+  }
+  | parameterlist COMMA parameter  {
+    $1->push_back($3);
+    $$ = $1;
+  }
+  | parameterlist error COMMA parameter {yyerror("Possibly missing comma");yyerrok;}
+;
+
+parameter: 
+  type ID {
+    $$ = new Parameter($1, $2->getIdent());
+  }
+;
+
+
+block:
+  LBRACK localvardecs statements RBRACK {
+    $$ = new Block($2, $3);
+  }
+  | LBRACK localvardecs RBRACK {
+    $$ = new Block($2, new NodeList());
+  }
+  | LBRACK statements RBRACK {
+    $$ = new Block(new NodeList(), $2);
+  }
+  | LBRACK RBRACK {
+    $$ = new Block(new NodeList(), new NodeList());
+  }
+;
+
+localvardecs:
+  localvardec{
+    $$ = new  NodeList();
+    $$->push_back($1);
+  }
+  | localvardecs localvardec {
+    $1->push_back($2);
+  }
+
+;
+
+localvardec:
+  type ID SEMI {
+    $$ = new LocalVarDec($1, $2->getIdent());
+  }
+  | error  SEMI  { yyerror("Missing semicolon"); yyerrok;}
+  | error RBRACK { yyerror("Missing semicolon"); yyerrok;}
+;
+
+statements:
+  statement {
+    $$ = new NodeList();
+    $$->push_back($1);
+  }
+  | statements statement {
+    $1->push_back($2);
+  }
+;
+
+statement:
+  SEMI {
+      $$ = new Statement();
+  }
+  | name EQ expression SEMI {
+    $$ = new AssignStatement($1, $3);
+  }
+  | name LPARAM arglist RPARAM SEMI {
+    $$ = new FuncCallStatement($1, $3);
+  }
+  | name LPARAM RPARAM SEMI {
+    $$ = new FuncCallStatement($1, new ArgList());
+  }
+  | PRINT LPARAM arglist RPARAM SEMI {
+      $$ = new PrintStatement($3);
+  }
+  | PRINT LPARAM RPARAM SEMI {
+      $$ = new PrintStatement(new ArgList());
+  }
+  | IF LPARAM expression RPARAM statement {
+      $$ = new IfStatement($3, $5);
+  }
+  | IF LPARAM expression RPARAM statement ELSE statement {
+      $$ = new IfElseStat($3, $5, $7);
+  }
+  | WHILE LPARAM expression RPARAM statement {
+      $$ = new WhileStatement($3, $5);
+  }
+  | RET expression SEMI{
+      $$ = new ReturnStatement($2);
+  }
+  | RET SEMI {
+      $$ = new ReturnStatement();
+  }
+  | block {
+      $$ = new BlockStatement($1);
+  }
+;
+
+type:
+  simpletype {
+    $$ = new Type($1, new NodeList());
+  }
+  | simpletype multibrackets {
+    $$ = new Type($1, $2);
+  }
+;
+
+multibrackets:
+  OSB CSB {
+    $$ = new Multibrackets();
+    $$->push_back(new Node());
+  }
+  | multibrackets OSB CSB {
+    $1->push_back(new Node());
+  }
+;
+
+
+simpletype:
+  INT {
+    $$ = new SimpleType("int");
+  }
+  | ID {
+    $$ = new SimpleType($1->getIdent());
+  }
+;
+
+name:
+  THIS {
+    $$ = new Name("this");
+  }
+  | ID {
+    $$ = new Name($1->getIdent());
+  }
+  | ID elementAccess {}
+  | THIS DOT nameNoThis {
+    $$ = new Name(new Name("this"),$3);
+  }
+  | ID DOT name {
+    $$ = new Name($1->getIdent(), $3);
+  }
+  | THIS error SEMI {yyerror("possibly missing ."); yyerrok;}
+  | ID error SEMI   {yyerror("possibly missing ."); yyerrok;}
+;
+
+elementAccess: 
+  OSB expression CSB {
+    $$ = new NodeList();
+    $$->push_back($2);
+  }
+  | elementAccess OSB expression CSB {
+    $$->push_back($3);
+  }
+;
+
+
+nameNoThis:
+  ID {
+    $$ = new Name($1->getIdent());
+  }
+  | nameNoThis DOT ID{
+    $$ = new Name($1, $3->getIdent());
+  }
+;
+
+arglist:
+  expression{
+    $$ = new ArgList();
+    $$->push_back($1);
+  }
+  | arglist COMMA expression{
+    $$->push_back($3);
+  }
+;
+
+expression:
+  NUM {
+    $$ = new Expression(stoi($1->getIdent()));
+  }
+  | name {
+    $$ = new Expression($1);
+  }
+  | READ LPARAM RPARAM {
+      $$ = new ReadExp();
+  }
+  | NLL {
+      $$ = new Expression();
+  }
+  | name LPARAM arglist RPARAM {
+      $$ = new FuncExp($1, $3, false);
+  }
+  | name LPARAM RPARAM {
+      $$ = new FuncExp($1, new Node(), true);
+  }
+  | NEW newexp {
+    $$ = new NewExp($2);
+  }
+  | unaryop expression %prec UNARY {$$ = new UnaryExp($1, $2);}
+  | expression ADD expression {$$ = new BinaryExp($1, "+", $3);}
+  | expression SUB expression {$$ = new BinaryExp($1, "-", $3);}
+  | expression COND_OR expression {$$ = new BinaryExp($1, "||", $3);}
+  | expression MUL expression {$$ = new BinaryExp($1, "*", $3);}
+  | expression DIV expression {$$ = new BinaryExp($1, "/", $3);}
+  | expression MOD expression {$$ = new BinaryExp($1, "%", $3);}
+  | expression COND_AND expression {$$ = new BinaryExp($1, "&&", $3);}
+  | expression LT expression {$$ = new BinaryExp($1, "<", $3);}
+  | expression GT expression {$$ = new BinaryExp($1, ">", $3);}
+  | expression LE expression {$$ = new BinaryExp($1, "<=", $3);}
+  | expression GE expression {$$ = new BinaryExp($1, ">=", $3);}
+  | expression NOT_EQUAL expression {$$ = new BinaryExp($1, "!=", $3);}
+  | expression EQUAL expression {$$ = new BinaryExp($1, "==", $3);}
+  | LPARAM expression RPARAM {$$ = new ParanExp($2);}
+  
+;
+
+unaryop:
+  ADD {$$ = new UnaryOp("+");}
+  | SUB {$$ = new UnaryOp("-");}
+  | NOT {$$ = new UnaryOp("!");}
+;
+
+newexp:
+  ID LPARAM arglist RPARAM {
+    $$ = new Nexp($1->getIdent(), $3);
+  }
+  | ID LPARAM RPARAM {
+    $$ = new Nexp($1->getIdent());
+  }
+  | simpletype {
+    $$ = new Nexp($1);
+  }
+  | simpletype newoexpc {
+    $$ = new Nexp($1, $2, new NodeList());
+  }
+  | simpletype newoexpc multibrackets {
+    $$ = new Nexp($1, $2, $3);
+  }
+  | simpletype multibrackets {
+    $$ = new Nexp($1, new NodeList(), $2);
+  }
+;
+
+newoexpc:
+  OSB expression CSB  {
+    $$ = new NodeList();
+    $$->push_back(new SqExp($2)); 
+  } 
+  | newoexpc OSB expression CSB {
+    $$->push_back(new SqExp($3));
+  }
+;
+
+
+%%

@@ -1,0 +1,3154 @@
+State 45 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program classdec
+    2        | classdec
+
+    3 classdec: CLASS ID classbody
+
+    4 classbody: LBRACK var_declarations constructors method_declarations RBRACK
+    5          | LBRACK var_declarations constructors RBRACK
+    6          | LBRACK var_declarations method_declarations RBRACK
+    7          | LBRACK constructors method_declarations RBRACK
+    8          | LBRACK var_declarations RBRACK
+    9          | LBRACK constructors RBRACK
+   10          | LBRACK method_declarations RBRACK
+   11          | LBRACK RBRACK
+
+   12 var_declarations: type ID SEMI
+   13                 | var_declarations type ID SEMI
+   14                 | error SEMI
+   15                 | error RBRACK
+
+   16 constructors: construct
+   17             | constructors construct
+
+   18 construct: ID LPARAM RPARAM block
+   19          | ID LPARAM parameterlist RPARAM block
+   20          | error block
+
+   21 method_declarations: method_declaration
+   22                    | method_declarations method_declaration
+
+   23 method_declaration: type ID LPARAM RPARAM block
+   24                   | VOID ID LPARAM RPARAM block
+   25                   | type ID LPARAM parameterlist RPARAM block
+   26                   | VOID ID LPARAM parameterlist RPARAM block
+   27                   | type error block
+   28                   | VOID error block
+
+   29 parameterlist: parameter
+   30              | parameterlist COMMA parameter
+   31              | parameterlist error COMMA parameter
+
+   32 parameter: type ID
+
+   33 block: LBRACK localvardecs statements RBRACK
+   34      | LBRACK localvardecs RBRACK
+   35      | LBRACK statements RBRACK
+   36      | LBRACK RBRACK
+
+   37 localvardecs: localvardec
+   38             | localvardecs localvardec
+
+   39 localvardec: type ID SEMI
+   40            | error SEMI
+   41            | error RBRACK
+
+   42 statements: statement
+   43           | statements statement
+
+   44 statement: SEMI
+   45          | name EQ expression SEMI
+   46          | name LPARAM arglist RPARAM SEMI
+   47          | name LPARAM RPARAM SEMI
+   48          | PRINT LPARAM arglist RPARAM SEMI
+   49          | PRINT LPARAM RPARAM SEMI
+   50          | IF LPARAM expression RPARAM statement
+   51          | IF LPARAM expression RPARAM statement ELSE statement
+   52          | WHILE LPARAM expression RPARAM statement
+   53          | RET expression SEMI
+   54          | RET SEMI
+   55          | block
+
+   56 type: simpletype
+   57     | simpletype multibrackets
+
+   58 multibrackets: OSB CSB
+   59              | multibrackets OSB CSB
+
+   60 simpletype: INT
+   61           | ID
+
+   62 name: THIS
+   63     | ID
+   64     | ID elementAccess
+   65     | THIS DOT nameNoThis
+   66     | ID DOT name
+   67     | THIS error SEMI
+   68     | ID error SEMI
+
+   69 elementAccess: OSB expression CSB
+   70              | elementAccess OSB expression CSB
+
+   71 nameNoThis: ID
+   72           | nameNoThis DOT ID
+
+   73 arglist: expression
+   74        | arglist COMMA expression
+
+   75 expression: NUM
+   76           | name
+   77           | READ LPARAM RPARAM
+   78           | NLL
+   79           | name LPARAM arglist RPARAM
+   80           | name LPARAM RPARAM
+   81           | NEW newexp
+   82           | unaryop expression
+   83           | expression ADD expression
+   84           | expression SUB expression
+   85           | expression COND_OR expression
+   86           | expression MUL expression
+   87           | expression DIV expression
+   88           | expression MOD expression
+   89           | expression COND_AND expression
+   90           | expression LT expression
+   91           | expression GT expression
+   92           | expression LE expression
+   93           | expression GE expression
+   94           | expression NOT_EQUAL expression
+   95           | expression EQUAL expression
+   96           | LPARAM expression RPARAM
+
+   97 unaryop: ADD
+   98        | SUB
+   99        | NOT
+
+  100 newexp: ID LPARAM arglist RPARAM
+  101       | ID LPARAM RPARAM
+  102       | simpletype
+  103       | simpletype newoexpc
+  104       | simpletype newoexpc multibrackets
+  105       | simpletype multibrackets
+
+  106 newoexpc: OSB expression CSB
+  107         | newoexpc OSB expression CSB
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256) 14 15 20 27 28 31 40 41 67 68
+    ID <nt> (258) 3 12 13 18 19 23 24 25 26 32 39 61 63 64 66 68 71 72 100 101
+    NUM <nt> (259) 75
+    CLASS (260) 3
+    RBRACK (261) 4 5 6 7 8 9 10 11 15 33 34 35 36 41
+    LBRACK (262) 4 5 6 7 8 9 10 11 33 34 35 36
+    INT (263) 60
+    COMMA (264) 30 31 74
+    THIS (265) 62 65 67
+    DOT (266) 65 66 72
+    LPARAM (267) 18 19 23 24 25 26 46 47 48 49 50 51 52 77 79 80 96 100 101
+    RPARAM (268) 18 19 23 24 25 26 46 47 48 49 50 51 52 77 79 80 96 100 101
+    SEMI (269) 12 13 14 39 40 44 45 46 47 48 49 53 54 67 68
+    CSB (270) 58 59 69 70 106 107
+    VOID (271) 24 26 28
+    PRINT (272) 48 49
+    ELSE (273) 51
+    WHILE (274) 52
+    RET (275) 53 54
+    IF (276) 50 51
+    OSB (277) 58 59 69 70 106 107
+    NLL (278) 78
+    READ (279) 77
+    NEW (280) 81
+    MUL (281) 86
+    DIV (282) 87
+    ADD (283) 83 97
+    MOD (284) 88
+    SUB (285) 84 98
+    COND_AND (286) 89
+    COND_OR (287) 85
+    NOT (288) 99
+    EQUAL (289) 95
+    NOT_EQUAL (290) 94
+    LT (291) 90
+    GT (292) 91
+    LE (293) 92
+    GE (294) 93
+    UNARY (295)
+    EQ (296) 45
+
+
+Nonterminals, with rules where they appear
+
+    $accept (42)
+        on left: 0
+    program <nt> (43)
+        on left: 1 2
+        on right: 0 1
+    classdec <nt> (44)
+        on left: 3
+        on right: 1 2
+    classbody <nt> (45)
+        on left: 4 5 6 7 8 9 10 11
+        on right: 3
+    var_declarations <nt> (46)
+        on left: 12 13 14 15
+        on right: 4 5 6 8 13
+    constructors <nt> (47)
+        on left: 16 17
+        on right: 4 5 7 9 17
+    construct <nt> (48)
+        on left: 18 19 20
+        on right: 16 17
+    method_declarations <nt> (49)
+        on left: 21 22
+        on right: 4 6 7 10 22
+    method_declaration <nt> (50)
+        on left: 23 24 25 26 27 28
+        on right: 21 22
+    parameterlist <nt> (51)
+        on left: 29 30 31
+        on right: 19 25 26 30 31
+    parameter <nt> (52)
+        on left: 32
+        on right: 29 30 31
+    block <nt> (53)
+        on left: 33 34 35 36
+        on right: 18 19 20 23 24 25 26 27 28 55
+    localvardecs <nt> (54)
+        on left: 37 38
+        on right: 33 34 38
+    localvardec <nt> (55)
+        on left: 39 40 41
+        on right: 37 38
+    statements <nt> (56)
+        on left: 42 43
+        on right: 33 35 43
+    statement <nt> (57)
+        on left: 44 45 46 47 48 49 50 51 52 53 54 55
+        on right: 42 43 50 51 52
+    type <nt> (58)
+        on left: 56 57
+        on right: 12 13 23 25 27 32 39
+    multibrackets <nt> (59)
+        on left: 58 59
+        on right: 57 59 104 105
+    simpletype <nt> (60)
+        on left: 60 61
+        on right: 56 57 102 103 104 105
+    name <nt> (61)
+        on left: 62 63 64 65 66 67 68
+        on right: 45 46 47 66 76 79 80
+    elementAccess <nt> (62)
+        on left: 69 70
+        on right: 64 70
+    nameNoThis <nt> (63)
+        on left: 71 72
+        on right: 65 72
+    arglist <nt> (64)
+        on left: 73 74
+        on right: 46 48 74 79 100
+    expression <nt> (65)
+        on left: 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96
+        on right: 45 50 51 52 53 69 70 73 74 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 106 107
+    unaryop <nt> (66)
+        on left: 97 98 99
+        on right: 82
+    newexp <nt> (67)
+        on left: 100 101 102 103 104 105
+        on right: 81
+    newoexpc <nt> (68)
+        on left: 106 107
+        on right: 103 104 107
+
+
+State 0
+
+    0 $accept: • program $end
+
+    CLASS  shift, and go to state 1
+
+    program   go to state 2
+    classdec  go to state 3
+
+
+State 1
+
+    3 classdec: CLASS • ID classbody
+
+    ID  shift, and go to state 4
+
+
+State 2
+
+    0 $accept: program • $end
+    1 program: program • classdec
+
+    $end   shift, and go to state 5
+    CLASS  shift, and go to state 1
+
+    classdec  go to state 6
+
+
+State 3
+
+    2 program: classdec •
+
+    $default  reduce using rule 2 (program)
+
+
+State 4
+
+    3 classdec: CLASS ID • classbody
+
+    LBRACK  shift, and go to state 7
+
+    classbody  go to state 8
+
+
+State 5
+
+    0 $accept: program $end •
+
+    $default  accept
+
+
+State 6
+
+    1 program: program classdec •
+
+    $default  reduce using rule 1 (program)
+
+
+State 7
+
+    4 classbody: LBRACK • var_declarations constructors method_declarations RBRACK
+    5          | LBRACK • var_declarations constructors RBRACK
+    6          | LBRACK • var_declarations method_declarations RBRACK
+    7          | LBRACK • constructors method_declarations RBRACK
+    8          | LBRACK • var_declarations RBRACK
+    9          | LBRACK • constructors RBRACK
+   10          | LBRACK • method_declarations RBRACK
+   11          | LBRACK • RBRACK
+
+    error   shift, and go to state 9
+    ID      shift, and go to state 10
+    RBRACK  shift, and go to state 11
+    INT     shift, and go to state 12
+    VOID    shift, and go to state 13
+
+    var_declarations     go to state 14
+    constructors         go to state 15
+    construct            go to state 16
+    method_declarations  go to state 17
+    method_declaration   go to state 18
+    type                 go to state 19
+    simpletype           go to state 20
+
+
+State 8
+
+    3 classdec: CLASS ID classbody •
+
+    $default  reduce using rule 3 (classdec)
+
+
+State 9
+
+   14 var_declarations: error • SEMI
+   15                 | error • RBRACK
+   20 construct: error • block
+
+    RBRACK  shift, and go to state 21
+    LBRACK  shift, and go to state 22
+    SEMI    shift, and go to state 23
+
+    block  go to state 24
+
+
+State 10
+
+   18 construct: ID • LPARAM RPARAM block
+   19          | ID • LPARAM parameterlist RPARAM block
+   61 simpletype: ID •
+
+    LPARAM  shift, and go to state 25
+
+    $default  reduce using rule 61 (simpletype)
+
+
+State 11
+
+   11 classbody: LBRACK RBRACK •
+
+    $default  reduce using rule 11 (classbody)
+
+
+State 12
+
+   60 simpletype: INT •
+
+    $default  reduce using rule 60 (simpletype)
+
+
+State 13
+
+   24 method_declaration: VOID • ID LPARAM RPARAM block
+   26                   | VOID • ID LPARAM parameterlist RPARAM block
+   28                   | VOID • error block
+
+    error  shift, and go to state 26
+    ID     shift, and go to state 27
+
+
+State 14
+
+    4 classbody: LBRACK var_declarations • constructors method_declarations RBRACK
+    5          | LBRACK var_declarations • constructors RBRACK
+    6          | LBRACK var_declarations • method_declarations RBRACK
+    8          | LBRACK var_declarations • RBRACK
+   13 var_declarations: var_declarations • type ID SEMI
+
+    error   shift, and go to state 28
+    ID      shift, and go to state 10
+    RBRACK  shift, and go to state 29
+    INT     shift, and go to state 12
+    VOID    shift, and go to state 13
+
+    constructors         go to state 30
+    construct            go to state 16
+    method_declarations  go to state 31
+    method_declaration   go to state 18
+    type                 go to state 32
+    simpletype           go to state 20
+
+
+State 15
+
+    7 classbody: LBRACK constructors • method_declarations RBRACK
+    9          | LBRACK constructors • RBRACK
+   17 constructors: constructors • construct
+
+    error   shift, and go to state 28
+    ID      shift, and go to state 10
+    RBRACK  shift, and go to state 33
+    INT     shift, and go to state 12
+    VOID    shift, and go to state 13
+
+    construct            go to state 34
+    method_declarations  go to state 35
+    method_declaration   go to state 18
+    type                 go to state 36
+    simpletype           go to state 20
+
+
+State 16
+
+   16 constructors: construct •
+
+    $default  reduce using rule 16 (constructors)
+
+
+State 17
+
+   10 classbody: LBRACK method_declarations • RBRACK
+   22 method_declarations: method_declarations • method_declaration
+
+    ID      shift, and go to state 37
+    RBRACK  shift, and go to state 38
+    INT     shift, and go to state 12
+    VOID    shift, and go to state 13
+
+    method_declaration  go to state 39
+    type                go to state 36
+    simpletype          go to state 20
+
+
+State 18
+
+   21 method_declarations: method_declaration •
+
+    $default  reduce using rule 21 (method_declarations)
+
+
+State 19
+
+   12 var_declarations: type • ID SEMI
+   23 method_declaration: type • ID LPARAM RPARAM block
+   25                   | type • ID LPARAM parameterlist RPARAM block
+   27                   | type • error block
+
+    error  shift, and go to state 40
+    ID     shift, and go to state 41
+
+
+State 20
+
+   56 type: simpletype •
+   57     | simpletype • multibrackets
+
+    OSB  shift, and go to state 42
+
+    $default  reduce using rule 56 (type)
+
+    multibrackets  go to state 43
+
+
+State 21
+
+   15 var_declarations: error RBRACK •
+
+    $default  reduce using rule 15 (var_declarations)
+
+
+State 22
+
+   33 block: LBRACK • localvardecs statements RBRACK
+   34      | LBRACK • localvardecs RBRACK
+   35      | LBRACK • statements RBRACK
+   36      | LBRACK • RBRACK
+
+    error   shift, and go to state 44
+    ID      shift, and go to state 45
+    RBRACK  shift, and go to state 46
+    LBRACK  shift, and go to state 22
+    INT     shift, and go to state 12
+    THIS    shift, and go to state 47
+    SEMI    shift, and go to state 48
+    PRINT   shift, and go to state 49
+    WHILE   shift, and go to state 50
+    RET     shift, and go to state 51
+    IF      shift, and go to state 52
+
+    block         go to state 53
+    localvardecs  go to state 54
+    localvardec   go to state 55
+    statements    go to state 56
+    statement     go to state 57
+    type          go to state 58
+    simpletype    go to state 20
+    name          go to state 59
+
+
+State 23
+
+   14 var_declarations: error SEMI •
+
+    $default  reduce using rule 14 (var_declarations)
+
+
+State 24
+
+   20 construct: error block •
+
+    $default  reduce using rule 20 (construct)
+
+
+State 25
+
+   18 construct: ID LPARAM • RPARAM block
+   19          | ID LPARAM • parameterlist RPARAM block
+
+    ID      shift, and go to state 37
+    INT     shift, and go to state 12
+    RPARAM  shift, and go to state 60
+
+    parameterlist  go to state 61
+    parameter      go to state 62
+    type           go to state 63
+    simpletype     go to state 20
+
+
+State 26
+
+   28 method_declaration: VOID error • block
+
+    LBRACK  shift, and go to state 22
+
+    block  go to state 64
+
+
+State 27
+
+   24 method_declaration: VOID ID • LPARAM RPARAM block
+   26                   | VOID ID • LPARAM parameterlist RPARAM block
+
+    LPARAM  shift, and go to state 65
+
+
+State 28
+
+   20 construct: error • block
+
+    LBRACK  shift, and go to state 22
+
+    block  go to state 24
+
+
+State 29
+
+    8 classbody: LBRACK var_declarations RBRACK •
+
+    $default  reduce using rule 8 (classbody)
+
+
+State 30
+
+    4 classbody: LBRACK var_declarations constructors • method_declarations RBRACK
+    5          | LBRACK var_declarations constructors • RBRACK
+   17 constructors: constructors • construct
+
+    error   shift, and go to state 28
+    ID      shift, and go to state 10
+    RBRACK  shift, and go to state 66
+    INT     shift, and go to state 12
+    VOID    shift, and go to state 13
+
+    construct            go to state 34
+    method_declarations  go to state 67
+    method_declaration   go to state 18
+    type                 go to state 36
+    simpletype           go to state 20
+
+
+State 31
+
+    6 classbody: LBRACK var_declarations method_declarations • RBRACK
+   22 method_declarations: method_declarations • method_declaration
+
+    ID      shift, and go to state 37
+    RBRACK  shift, and go to state 68
+    INT     shift, and go to state 12
+    VOID    shift, and go to state 13
+
+    method_declaration  go to state 39
+    type                go to state 36
+    simpletype          go to state 20
+
+
+State 32
+
+   13 var_declarations: var_declarations type • ID SEMI
+   23 method_declaration: type • ID LPARAM RPARAM block
+   25                   | type • ID LPARAM parameterlist RPARAM block
+   27                   | type • error block
+
+    error  shift, and go to state 40
+    ID     shift, and go to state 69
+
+
+State 33
+
+    9 classbody: LBRACK constructors RBRACK •
+
+    $default  reduce using rule 9 (classbody)
+
+
+State 34
+
+   17 constructors: constructors construct •
+
+    $default  reduce using rule 17 (constructors)
+
+
+State 35
+
+    7 classbody: LBRACK constructors method_declarations • RBRACK
+   22 method_declarations: method_declarations • method_declaration
+
+    ID      shift, and go to state 37
+    RBRACK  shift, and go to state 70
+    INT     shift, and go to state 12
+    VOID    shift, and go to state 13
+
+    method_declaration  go to state 39
+    type                go to state 36
+    simpletype          go to state 20
+
+
+State 36
+
+   23 method_declaration: type • ID LPARAM RPARAM block
+   25                   | type • ID LPARAM parameterlist RPARAM block
+   27                   | type • error block
+
+    error  shift, and go to state 40
+    ID     shift, and go to state 71
+
+
+State 37
+
+   61 simpletype: ID •
+
+    $default  reduce using rule 61 (simpletype)
+
+
+State 38
+
+   10 classbody: LBRACK method_declarations RBRACK •
+
+    $default  reduce using rule 10 (classbody)
+
+
+State 39
+
+   22 method_declarations: method_declarations method_declaration •
+
+    $default  reduce using rule 22 (method_declarations)
+
+
+State 40
+
+   27 method_declaration: type error • block
+
+    LBRACK  shift, and go to state 22
+
+    block  go to state 72
+
+
+State 41
+
+   12 var_declarations: type ID • SEMI
+   23 method_declaration: type ID • LPARAM RPARAM block
+   25                   | type ID • LPARAM parameterlist RPARAM block
+
+    LPARAM  shift, and go to state 73
+    SEMI    shift, and go to state 74
+
+
+State 42
+
+   58 multibrackets: OSB • CSB
+
+    CSB  shift, and go to state 75
+
+
+State 43
+
+   57 type: simpletype multibrackets •
+   59 multibrackets: multibrackets • OSB CSB
+
+    OSB  shift, and go to state 76
+
+    $default  reduce using rule 57 (type)
+
+
+State 44
+
+   40 localvardec: error • SEMI
+   41            | error • RBRACK
+
+    RBRACK  shift, and go to state 77
+    SEMI    shift, and go to state 78
+
+
+State 45
+
+   61 simpletype: ID •
+   63 name: ID •
+   64     | ID • elementAccess
+   66     | ID • DOT name
+   68     | ID • error SEMI
+
+    error  shift, and go to state 79
+    DOT    shift, and go to state 80
+    OSB    shift, and go to state 81
+
+    ID      reduce using rule 61 (simpletype)
+    LPARAM  reduce using rule 63 (name)
+    OSB     [reduce using rule 61 (simpletype)]
+    EQ      reduce using rule 63 (name)
+
+    elementAccess  go to state 82
+
+
+State 46
+
+   36 block: LBRACK RBRACK •
+
+    $default  reduce using rule 36 (block)
+
+
+State 47
+
+   62 name: THIS •
+   65     | THIS • DOT nameNoThis
+   67     | THIS • error SEMI
+
+    error  shift, and go to state 83
+    DOT    shift, and go to state 84
+
+    COMMA      reduce using rule 62 (name)
+    LPARAM     reduce using rule 62 (name)
+    RPARAM     reduce using rule 62 (name)
+    SEMI       reduce using rule 62 (name)
+    CSB        reduce using rule 62 (name)
+    MUL        reduce using rule 62 (name)
+    DIV        reduce using rule 62 (name)
+    ADD        reduce using rule 62 (name)
+    MOD        reduce using rule 62 (name)
+    SUB        reduce using rule 62 (name)
+    COND_AND   reduce using rule 62 (name)
+    COND_OR    reduce using rule 62 (name)
+    EQUAL      reduce using rule 62 (name)
+    NOT_EQUAL  reduce using rule 62 (name)
+    LT         reduce using rule 62 (name)
+    GT         reduce using rule 62 (name)
+    LE         reduce using rule 62 (name)
+    GE         reduce using rule 62 (name)
+    EQ         reduce using rule 62 (name)
+
+
+State 48
+
+   44 statement: SEMI •
+
+    $default  reduce using rule 44 (statement)
+
+
+State 49
+
+   48 statement: PRINT • LPARAM arglist RPARAM SEMI
+   49          | PRINT • LPARAM RPARAM SEMI
+
+    LPARAM  shift, and go to state 85
+
+
+State 50
+
+   52 statement: WHILE • LPARAM expression RPARAM statement
+
+    LPARAM  shift, and go to state 86
+
+
+State 51
+
+   53 statement: RET • expression SEMI
+   54          | RET • SEMI
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    SEMI    shift, and go to state 90
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 98
+    unaryop     go to state 99
+
+
+State 52
+
+   50 statement: IF • LPARAM expression RPARAM statement
+   51          | IF • LPARAM expression RPARAM statement ELSE statement
+
+    LPARAM  shift, and go to state 100
+
+
+State 53
+
+   55 statement: block •
+
+    $default  reduce using rule 55 (statement)
+
+
+State 54
+
+   33 block: LBRACK localvardecs • statements RBRACK
+   34      | LBRACK localvardecs • RBRACK
+   38 localvardecs: localvardecs • localvardec
+
+    error   shift, and go to state 44
+    ID      shift, and go to state 45
+    RBRACK  shift, and go to state 101
+    LBRACK  shift, and go to state 22
+    INT     shift, and go to state 12
+    THIS    shift, and go to state 47
+    SEMI    shift, and go to state 48
+    PRINT   shift, and go to state 49
+    WHILE   shift, and go to state 50
+    RET     shift, and go to state 51
+    IF      shift, and go to state 52
+
+    block        go to state 53
+    localvardec  go to state 102
+    statements   go to state 103
+    statement    go to state 57
+    type         go to state 58
+    simpletype   go to state 20
+    name         go to state 59
+
+
+State 55
+
+   37 localvardecs: localvardec •
+
+    $default  reduce using rule 37 (localvardecs)
+
+
+State 56
+
+   35 block: LBRACK statements • RBRACK
+   43 statements: statements • statement
+
+    ID      shift, and go to state 87
+    RBRACK  shift, and go to state 104
+    LBRACK  shift, and go to state 22
+    THIS    shift, and go to state 47
+    SEMI    shift, and go to state 48
+    PRINT   shift, and go to state 49
+    WHILE   shift, and go to state 50
+    RET     shift, and go to state 51
+    IF      shift, and go to state 52
+
+    block      go to state 53
+    statement  go to state 105
+    name       go to state 59
+
+
+State 57
+
+   42 statements: statement •
+
+    $default  reduce using rule 42 (statements)
+
+
+State 58
+
+   39 localvardec: type • ID SEMI
+
+    ID  shift, and go to state 106
+
+
+State 59
+
+   45 statement: name • EQ expression SEMI
+   46          | name • LPARAM arglist RPARAM SEMI
+   47          | name • LPARAM RPARAM SEMI
+
+    LPARAM  shift, and go to state 107
+    EQ      shift, and go to state 108
+
+
+State 60
+
+   18 construct: ID LPARAM RPARAM • block
+
+    LBRACK  shift, and go to state 22
+
+    block  go to state 109
+
+
+State 61
+
+   19 construct: ID LPARAM parameterlist • RPARAM block
+   30 parameterlist: parameterlist • COMMA parameter
+   31              | parameterlist • error COMMA parameter
+
+    error   shift, and go to state 110
+    COMMA   shift, and go to state 111
+    RPARAM  shift, and go to state 112
+
+
+State 62
+
+   29 parameterlist: parameter •
+
+    $default  reduce using rule 29 (parameterlist)
+
+
+State 63
+
+   32 parameter: type • ID
+
+    ID  shift, and go to state 113
+
+
+State 64
+
+   28 method_declaration: VOID error block •
+
+    $default  reduce using rule 28 (method_declaration)
+
+
+State 65
+
+   24 method_declaration: VOID ID LPARAM • RPARAM block
+   26                   | VOID ID LPARAM • parameterlist RPARAM block
+
+    ID      shift, and go to state 37
+    INT     shift, and go to state 12
+    RPARAM  shift, and go to state 114
+
+    parameterlist  go to state 115
+    parameter      go to state 62
+    type           go to state 63
+    simpletype     go to state 20
+
+
+State 66
+
+    5 classbody: LBRACK var_declarations constructors RBRACK •
+
+    $default  reduce using rule 5 (classbody)
+
+
+State 67
+
+    4 classbody: LBRACK var_declarations constructors method_declarations • RBRACK
+   22 method_declarations: method_declarations • method_declaration
+
+    ID      shift, and go to state 37
+    RBRACK  shift, and go to state 116
+    INT     shift, and go to state 12
+    VOID    shift, and go to state 13
+
+    method_declaration  go to state 39
+    type                go to state 36
+    simpletype          go to state 20
+
+
+State 68
+
+    6 classbody: LBRACK var_declarations method_declarations RBRACK •
+
+    $default  reduce using rule 6 (classbody)
+
+
+State 69
+
+   13 var_declarations: var_declarations type ID • SEMI
+   23 method_declaration: type ID • LPARAM RPARAM block
+   25                   | type ID • LPARAM parameterlist RPARAM block
+
+    LPARAM  shift, and go to state 73
+    SEMI    shift, and go to state 117
+
+
+State 70
+
+    7 classbody: LBRACK constructors method_declarations RBRACK •
+
+    $default  reduce using rule 7 (classbody)
+
+
+State 71
+
+   23 method_declaration: type ID • LPARAM RPARAM block
+   25                   | type ID • LPARAM parameterlist RPARAM block
+
+    LPARAM  shift, and go to state 73
+
+
+State 72
+
+   27 method_declaration: type error block •
+
+    $default  reduce using rule 27 (method_declaration)
+
+
+State 73
+
+   23 method_declaration: type ID LPARAM • RPARAM block
+   25                   | type ID LPARAM • parameterlist RPARAM block
+
+    ID      shift, and go to state 37
+    INT     shift, and go to state 12
+    RPARAM  shift, and go to state 118
+
+    parameterlist  go to state 119
+    parameter      go to state 62
+    type           go to state 63
+    simpletype     go to state 20
+
+
+State 74
+
+   12 var_declarations: type ID SEMI •
+
+    $default  reduce using rule 12 (var_declarations)
+
+
+State 75
+
+   58 multibrackets: OSB CSB •
+
+    $default  reduce using rule 58 (multibrackets)
+
+
+State 76
+
+   59 multibrackets: multibrackets OSB • CSB
+
+    CSB  shift, and go to state 120
+
+
+State 77
+
+   41 localvardec: error RBRACK •
+
+    $default  reduce using rule 41 (localvardec)
+
+
+State 78
+
+   40 localvardec: error SEMI •
+
+    $default  reduce using rule 40 (localvardec)
+
+
+State 79
+
+   68 name: ID error • SEMI
+
+    SEMI  shift, and go to state 121
+
+
+State 80
+
+   66 name: ID DOT • name
+
+    ID    shift, and go to state 87
+    THIS  shift, and go to state 47
+
+    name  go to state 122
+
+
+State 81
+
+   69 elementAccess: OSB • expression CSB
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 123
+    unaryop     go to state 99
+
+
+State 82
+
+   64 name: ID elementAccess •
+   70 elementAccess: elementAccess • OSB expression CSB
+
+    OSB  shift, and go to state 124
+
+    $default  reduce using rule 64 (name)
+
+
+State 83
+
+   67 name: THIS error • SEMI
+
+    SEMI  shift, and go to state 125
+
+
+State 84
+
+   65 name: THIS DOT • nameNoThis
+
+    ID  shift, and go to state 126
+
+    nameNoThis  go to state 127
+
+
+State 85
+
+   48 statement: PRINT LPARAM • arglist RPARAM SEMI
+   49          | PRINT LPARAM • RPARAM SEMI
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    RPARAM  shift, and go to state 128
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    arglist     go to state 129
+    expression  go to state 130
+    unaryop     go to state 99
+
+
+State 86
+
+   52 statement: WHILE LPARAM • expression RPARAM statement
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 131
+    unaryop     go to state 99
+
+
+State 87
+
+   63 name: ID •
+   64     | ID • elementAccess
+   66     | ID • DOT name
+   68     | ID • error SEMI
+
+    error  shift, and go to state 79
+    DOT    shift, and go to state 80
+    OSB    shift, and go to state 81
+
+    COMMA      reduce using rule 63 (name)
+    LPARAM     reduce using rule 63 (name)
+    RPARAM     reduce using rule 63 (name)
+    SEMI       reduce using rule 63 (name)
+    CSB        reduce using rule 63 (name)
+    MUL        reduce using rule 63 (name)
+    DIV        reduce using rule 63 (name)
+    ADD        reduce using rule 63 (name)
+    MOD        reduce using rule 63 (name)
+    SUB        reduce using rule 63 (name)
+    COND_AND   reduce using rule 63 (name)
+    COND_OR    reduce using rule 63 (name)
+    EQUAL      reduce using rule 63 (name)
+    NOT_EQUAL  reduce using rule 63 (name)
+    LT         reduce using rule 63 (name)
+    GT         reduce using rule 63 (name)
+    LE         reduce using rule 63 (name)
+    GE         reduce using rule 63 (name)
+    EQ         reduce using rule 63 (name)
+
+    elementAccess  go to state 82
+
+
+State 88
+
+   75 expression: NUM •
+
+    $default  reduce using rule 75 (expression)
+
+
+State 89
+
+   96 expression: LPARAM • expression RPARAM
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 132
+    unaryop     go to state 99
+
+
+State 90
+
+   54 statement: RET SEMI •
+
+    $default  reduce using rule 54 (statement)
+
+
+State 91
+
+   78 expression: NLL •
+
+    $default  reduce using rule 78 (expression)
+
+
+State 92
+
+   77 expression: READ • LPARAM RPARAM
+
+    LPARAM  shift, and go to state 133
+
+
+State 93
+
+   81 expression: NEW • newexp
+
+    ID   shift, and go to state 134
+    INT  shift, and go to state 12
+
+    simpletype  go to state 135
+    newexp      go to state 136
+
+
+State 94
+
+   97 unaryop: ADD •
+
+    $default  reduce using rule 97 (unaryop)
+
+
+State 95
+
+   98 unaryop: SUB •
+
+    $default  reduce using rule 98 (unaryop)
+
+
+State 96
+
+   99 unaryop: NOT •
+
+    $default  reduce using rule 99 (unaryop)
+
+
+State 97
+
+   76 expression: name •
+   79           | name • LPARAM arglist RPARAM
+   80           | name • LPARAM RPARAM
+
+    LPARAM  shift, and go to state 137
+
+    $default  reduce using rule 76 (expression)
+
+
+State 98
+
+   53 statement: RET expression • SEMI
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    SEMI       shift, and go to state 138
+    MUL        shift, and go to state 139
+    DIV        shift, and go to state 140
+    ADD        shift, and go to state 141
+    MOD        shift, and go to state 142
+    SUB        shift, and go to state 143
+    COND_AND   shift, and go to state 144
+    COND_OR    shift, and go to state 145
+    EQUAL      shift, and go to state 146
+    NOT_EQUAL  shift, and go to state 147
+    LT         shift, and go to state 148
+    GT         shift, and go to state 149
+    LE         shift, and go to state 150
+    GE         shift, and go to state 151
+
+
+State 99
+
+   82 expression: unaryop • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 152
+    unaryop     go to state 99
+
+
+State 100
+
+   50 statement: IF LPARAM • expression RPARAM statement
+   51          | IF LPARAM • expression RPARAM statement ELSE statement
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 153
+    unaryop     go to state 99
+
+
+State 101
+
+   34 block: LBRACK localvardecs RBRACK •
+
+    $default  reduce using rule 34 (block)
+
+
+State 102
+
+   38 localvardecs: localvardecs localvardec •
+
+    $default  reduce using rule 38 (localvardecs)
+
+
+State 103
+
+   33 block: LBRACK localvardecs statements • RBRACK
+   43 statements: statements • statement
+
+    ID      shift, and go to state 87
+    RBRACK  shift, and go to state 154
+    LBRACK  shift, and go to state 22
+    THIS    shift, and go to state 47
+    SEMI    shift, and go to state 48
+    PRINT   shift, and go to state 49
+    WHILE   shift, and go to state 50
+    RET     shift, and go to state 51
+    IF      shift, and go to state 52
+
+    block      go to state 53
+    statement  go to state 105
+    name       go to state 59
+
+
+State 104
+
+   35 block: LBRACK statements RBRACK •
+
+    $default  reduce using rule 35 (block)
+
+
+State 105
+
+   43 statements: statements statement •
+
+    $default  reduce using rule 43 (statements)
+
+
+State 106
+
+   39 localvardec: type ID • SEMI
+
+    SEMI  shift, and go to state 155
+
+
+State 107
+
+   46 statement: name LPARAM • arglist RPARAM SEMI
+   47          | name LPARAM • RPARAM SEMI
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    RPARAM  shift, and go to state 156
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    arglist     go to state 157
+    expression  go to state 130
+    unaryop     go to state 99
+
+
+State 108
+
+   45 statement: name EQ • expression SEMI
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 158
+    unaryop     go to state 99
+
+
+State 109
+
+   18 construct: ID LPARAM RPARAM block •
+
+    $default  reduce using rule 18 (construct)
+
+
+State 110
+
+   31 parameterlist: parameterlist error • COMMA parameter
+
+    COMMA  shift, and go to state 159
+
+
+State 111
+
+   30 parameterlist: parameterlist COMMA • parameter
+
+    ID   shift, and go to state 37
+    INT  shift, and go to state 12
+
+    parameter   go to state 160
+    type        go to state 63
+    simpletype  go to state 20
+
+
+State 112
+
+   19 construct: ID LPARAM parameterlist RPARAM • block
+
+    LBRACK  shift, and go to state 22
+
+    block  go to state 161
+
+
+State 113
+
+   32 parameter: type ID •
+
+    $default  reduce using rule 32 (parameter)
+
+
+State 114
+
+   24 method_declaration: VOID ID LPARAM RPARAM • block
+
+    LBRACK  shift, and go to state 22
+
+    block  go to state 162
+
+
+State 115
+
+   26 method_declaration: VOID ID LPARAM parameterlist • RPARAM block
+   30 parameterlist: parameterlist • COMMA parameter
+   31              | parameterlist • error COMMA parameter
+
+    error   shift, and go to state 110
+    COMMA   shift, and go to state 111
+    RPARAM  shift, and go to state 163
+
+
+State 116
+
+    4 classbody: LBRACK var_declarations constructors method_declarations RBRACK •
+
+    $default  reduce using rule 4 (classbody)
+
+
+State 117
+
+   13 var_declarations: var_declarations type ID SEMI •
+
+    $default  reduce using rule 13 (var_declarations)
+
+
+State 118
+
+   23 method_declaration: type ID LPARAM RPARAM • block
+
+    LBRACK  shift, and go to state 22
+
+    block  go to state 164
+
+
+State 119
+
+   25 method_declaration: type ID LPARAM parameterlist • RPARAM block
+   30 parameterlist: parameterlist • COMMA parameter
+   31              | parameterlist • error COMMA parameter
+
+    error   shift, and go to state 110
+    COMMA   shift, and go to state 111
+    RPARAM  shift, and go to state 165
+
+
+State 120
+
+   59 multibrackets: multibrackets OSB CSB •
+
+    $default  reduce using rule 59 (multibrackets)
+
+
+State 121
+
+   68 name: ID error SEMI •
+
+    $default  reduce using rule 68 (name)
+
+
+State 122
+
+   66 name: ID DOT name •
+
+    $default  reduce using rule 66 (name)
+
+
+State 123
+
+   69 elementAccess: OSB expression • CSB
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    CSB        shift, and go to state 166
+    MUL        shift, and go to state 139
+    DIV        shift, and go to state 140
+    ADD        shift, and go to state 141
+    MOD        shift, and go to state 142
+    SUB        shift, and go to state 143
+    COND_AND   shift, and go to state 144
+    COND_OR    shift, and go to state 145
+    EQUAL      shift, and go to state 146
+    NOT_EQUAL  shift, and go to state 147
+    LT         shift, and go to state 148
+    GT         shift, and go to state 149
+    LE         shift, and go to state 150
+    GE         shift, and go to state 151
+
+
+State 124
+
+   70 elementAccess: elementAccess OSB • expression CSB
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 167
+    unaryop     go to state 99
+
+
+State 125
+
+   67 name: THIS error SEMI •
+
+    $default  reduce using rule 67 (name)
+
+
+State 126
+
+   71 nameNoThis: ID •
+
+    $default  reduce using rule 71 (nameNoThis)
+
+
+State 127
+
+   65 name: THIS DOT nameNoThis •
+   72 nameNoThis: nameNoThis • DOT ID
+
+    DOT  shift, and go to state 168
+
+    $default  reduce using rule 65 (name)
+
+
+State 128
+
+   49 statement: PRINT LPARAM RPARAM • SEMI
+
+    SEMI  shift, and go to state 169
+
+
+State 129
+
+   48 statement: PRINT LPARAM arglist • RPARAM SEMI
+   74 arglist: arglist • COMMA expression
+
+    COMMA   shift, and go to state 170
+    RPARAM  shift, and go to state 171
+
+
+State 130
+
+   73 arglist: expression •
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    MUL        shift, and go to state 139
+    DIV        shift, and go to state 140
+    ADD        shift, and go to state 141
+    MOD        shift, and go to state 142
+    SUB        shift, and go to state 143
+    COND_AND   shift, and go to state 144
+    COND_OR    shift, and go to state 145
+    EQUAL      shift, and go to state 146
+    NOT_EQUAL  shift, and go to state 147
+    LT         shift, and go to state 148
+    GT         shift, and go to state 149
+    LE         shift, and go to state 150
+    GE         shift, and go to state 151
+
+    $default  reduce using rule 73 (arglist)
+
+
+State 131
+
+   52 statement: WHILE LPARAM expression • RPARAM statement
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    RPARAM     shift, and go to state 172
+    MUL        shift, and go to state 139
+    DIV        shift, and go to state 140
+    ADD        shift, and go to state 141
+    MOD        shift, and go to state 142
+    SUB        shift, and go to state 143
+    COND_AND   shift, and go to state 144
+    COND_OR    shift, and go to state 145
+    EQUAL      shift, and go to state 146
+    NOT_EQUAL  shift, and go to state 147
+    LT         shift, and go to state 148
+    GT         shift, and go to state 149
+    LE         shift, and go to state 150
+    GE         shift, and go to state 151
+
+
+State 132
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+   96           | LPARAM expression • RPARAM
+
+    RPARAM     shift, and go to state 173
+    MUL        shift, and go to state 139
+    DIV        shift, and go to state 140
+    ADD        shift, and go to state 141
+    MOD        shift, and go to state 142
+    SUB        shift, and go to state 143
+    COND_AND   shift, and go to state 144
+    COND_OR    shift, and go to state 145
+    EQUAL      shift, and go to state 146
+    NOT_EQUAL  shift, and go to state 147
+    LT         shift, and go to state 148
+    GT         shift, and go to state 149
+    LE         shift, and go to state 150
+    GE         shift, and go to state 151
+
+
+State 133
+
+   77 expression: READ LPARAM • RPARAM
+
+    RPARAM  shift, and go to state 174
+
+
+State 134
+
+   61 simpletype: ID •
+  100 newexp: ID • LPARAM arglist RPARAM
+  101       | ID • LPARAM RPARAM
+
+    LPARAM  shift, and go to state 175
+
+    $default  reduce using rule 61 (simpletype)
+
+
+State 135
+
+  102 newexp: simpletype •
+  103       | simpletype • newoexpc
+  104       | simpletype • newoexpc multibrackets
+  105       | simpletype • multibrackets
+
+    OSB  shift, and go to state 176
+
+    $default  reduce using rule 102 (newexp)
+
+    multibrackets  go to state 177
+    newoexpc       go to state 178
+
+
+State 136
+
+   81 expression: NEW newexp •
+
+    $default  reduce using rule 81 (expression)
+
+
+State 137
+
+   79 expression: name LPARAM • arglist RPARAM
+   80           | name LPARAM • RPARAM
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    RPARAM  shift, and go to state 179
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    arglist     go to state 180
+    expression  go to state 130
+    unaryop     go to state 99
+
+
+State 138
+
+   53 statement: RET expression SEMI •
+
+    $default  reduce using rule 53 (statement)
+
+
+State 139
+
+   86 expression: expression MUL • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 181
+    unaryop     go to state 99
+
+
+State 140
+
+   87 expression: expression DIV • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 182
+    unaryop     go to state 99
+
+
+State 141
+
+   83 expression: expression ADD • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 183
+    unaryop     go to state 99
+
+
+State 142
+
+   88 expression: expression MOD • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 184
+    unaryop     go to state 99
+
+
+State 143
+
+   84 expression: expression SUB • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 185
+    unaryop     go to state 99
+
+
+State 144
+
+   89 expression: expression COND_AND • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 186
+    unaryop     go to state 99
+
+
+State 145
+
+   85 expression: expression COND_OR • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 187
+    unaryop     go to state 99
+
+
+State 146
+
+   95 expression: expression EQUAL • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 188
+    unaryop     go to state 99
+
+
+State 147
+
+   94 expression: expression NOT_EQUAL • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 189
+    unaryop     go to state 99
+
+
+State 148
+
+   90 expression: expression LT • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 190
+    unaryop     go to state 99
+
+
+State 149
+
+   91 expression: expression GT • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 191
+    unaryop     go to state 99
+
+
+State 150
+
+   92 expression: expression LE • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 192
+    unaryop     go to state 99
+
+
+State 151
+
+   93 expression: expression GE • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 193
+    unaryop     go to state 99
+
+
+State 152
+
+   82 expression: unaryop expression •
+   83           | expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    $default  reduce using rule 82 (expression)
+
+
+State 153
+
+   50 statement: IF LPARAM expression • RPARAM statement
+   51          | IF LPARAM expression • RPARAM statement ELSE statement
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    RPARAM     shift, and go to state 194
+    MUL        shift, and go to state 139
+    DIV        shift, and go to state 140
+    ADD        shift, and go to state 141
+    MOD        shift, and go to state 142
+    SUB        shift, and go to state 143
+    COND_AND   shift, and go to state 144
+    COND_OR    shift, and go to state 145
+    EQUAL      shift, and go to state 146
+    NOT_EQUAL  shift, and go to state 147
+    LT         shift, and go to state 148
+    GT         shift, and go to state 149
+    LE         shift, and go to state 150
+    GE         shift, and go to state 151
+
+
+State 154
+
+   33 block: LBRACK localvardecs statements RBRACK •
+
+    $default  reduce using rule 33 (block)
+
+
+State 155
+
+   39 localvardec: type ID SEMI •
+
+    $default  reduce using rule 39 (localvardec)
+
+
+State 156
+
+   47 statement: name LPARAM RPARAM • SEMI
+
+    SEMI  shift, and go to state 195
+
+
+State 157
+
+   46 statement: name LPARAM arglist • RPARAM SEMI
+   74 arglist: arglist • COMMA expression
+
+    COMMA   shift, and go to state 170
+    RPARAM  shift, and go to state 196
+
+
+State 158
+
+   45 statement: name EQ expression • SEMI
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    SEMI       shift, and go to state 197
+    MUL        shift, and go to state 139
+    DIV        shift, and go to state 140
+    ADD        shift, and go to state 141
+    MOD        shift, and go to state 142
+    SUB        shift, and go to state 143
+    COND_AND   shift, and go to state 144
+    COND_OR    shift, and go to state 145
+    EQUAL      shift, and go to state 146
+    NOT_EQUAL  shift, and go to state 147
+    LT         shift, and go to state 148
+    GT         shift, and go to state 149
+    LE         shift, and go to state 150
+    GE         shift, and go to state 151
+
+
+State 159
+
+   31 parameterlist: parameterlist error COMMA • parameter
+
+    ID   shift, and go to state 37
+    INT  shift, and go to state 12
+
+    parameter   go to state 198
+    type        go to state 63
+    simpletype  go to state 20
+
+
+State 160
+
+   30 parameterlist: parameterlist COMMA parameter •
+
+    $default  reduce using rule 30 (parameterlist)
+
+
+State 161
+
+   19 construct: ID LPARAM parameterlist RPARAM block •
+
+    $default  reduce using rule 19 (construct)
+
+
+State 162
+
+   24 method_declaration: VOID ID LPARAM RPARAM block •
+
+    $default  reduce using rule 24 (method_declaration)
+
+
+State 163
+
+   26 method_declaration: VOID ID LPARAM parameterlist RPARAM • block
+
+    LBRACK  shift, and go to state 22
+
+    block  go to state 199
+
+
+State 164
+
+   23 method_declaration: type ID LPARAM RPARAM block •
+
+    $default  reduce using rule 23 (method_declaration)
+
+
+State 165
+
+   25 method_declaration: type ID LPARAM parameterlist RPARAM • block
+
+    LBRACK  shift, and go to state 22
+
+    block  go to state 200
+
+
+State 166
+
+   69 elementAccess: OSB expression CSB •
+
+    $default  reduce using rule 69 (elementAccess)
+
+
+State 167
+
+   70 elementAccess: elementAccess OSB expression • CSB
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    CSB        shift, and go to state 201
+    MUL        shift, and go to state 139
+    DIV        shift, and go to state 140
+    ADD        shift, and go to state 141
+    MOD        shift, and go to state 142
+    SUB        shift, and go to state 143
+    COND_AND   shift, and go to state 144
+    COND_OR    shift, and go to state 145
+    EQUAL      shift, and go to state 146
+    NOT_EQUAL  shift, and go to state 147
+    LT         shift, and go to state 148
+    GT         shift, and go to state 149
+    LE         shift, and go to state 150
+    GE         shift, and go to state 151
+
+
+State 168
+
+   72 nameNoThis: nameNoThis DOT • ID
+
+    ID  shift, and go to state 202
+
+
+State 169
+
+   49 statement: PRINT LPARAM RPARAM SEMI •
+
+    $default  reduce using rule 49 (statement)
+
+
+State 170
+
+   74 arglist: arglist COMMA • expression
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 203
+    unaryop     go to state 99
+
+
+State 171
+
+   48 statement: PRINT LPARAM arglist RPARAM • SEMI
+
+    SEMI  shift, and go to state 204
+
+
+State 172
+
+   52 statement: WHILE LPARAM expression RPARAM • statement
+
+    ID      shift, and go to state 87
+    LBRACK  shift, and go to state 22
+    THIS    shift, and go to state 47
+    SEMI    shift, and go to state 48
+    PRINT   shift, and go to state 49
+    WHILE   shift, and go to state 50
+    RET     shift, and go to state 51
+    IF      shift, and go to state 52
+
+    block      go to state 53
+    statement  go to state 205
+    name       go to state 59
+
+
+State 173
+
+   96 expression: LPARAM expression RPARAM •
+
+    $default  reduce using rule 96 (expression)
+
+
+State 174
+
+   77 expression: READ LPARAM RPARAM •
+
+    $default  reduce using rule 77 (expression)
+
+
+State 175
+
+  100 newexp: ID LPARAM • arglist RPARAM
+  101       | ID LPARAM • RPARAM
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    RPARAM  shift, and go to state 206
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    arglist     go to state 207
+    expression  go to state 130
+    unaryop     go to state 99
+
+
+State 176
+
+   58 multibrackets: OSB • CSB
+  106 newoexpc: OSB • expression CSB
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    CSB     shift, and go to state 75
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 208
+    unaryop     go to state 99
+
+
+State 177
+
+   59 multibrackets: multibrackets • OSB CSB
+  105 newexp: simpletype multibrackets •
+
+    OSB  shift, and go to state 76
+
+    $default  reduce using rule 105 (newexp)
+
+
+State 178
+
+  103 newexp: simpletype newoexpc •
+  104       | simpletype newoexpc • multibrackets
+  107 newoexpc: newoexpc • OSB expression CSB
+
+    OSB  shift, and go to state 209
+
+    $default  reduce using rule 103 (newexp)
+
+    multibrackets  go to state 210
+
+
+State 179
+
+   80 expression: name LPARAM RPARAM •
+
+    $default  reduce using rule 80 (expression)
+
+
+State 180
+
+   74 arglist: arglist • COMMA expression
+   79 expression: name LPARAM arglist • RPARAM
+
+    COMMA   shift, and go to state 170
+    RPARAM  shift, and go to state 211
+
+
+State 181
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   86           | expression MUL expression •
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    $default  reduce using rule 86 (expression)
+
+
+State 182
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   87           | expression DIV expression •
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    $default  reduce using rule 87 (expression)
+
+
+State 183
+
+   83 expression: expression • ADD expression
+   83           | expression ADD expression •
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    MUL       shift, and go to state 139
+    DIV       shift, and go to state 140
+    MOD       shift, and go to state 142
+    COND_AND  shift, and go to state 144
+
+    $default  reduce using rule 83 (expression)
+
+
+State 184
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   88           | expression MOD expression •
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    $default  reduce using rule 88 (expression)
+
+
+State 185
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   84           | expression SUB expression •
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    MUL       shift, and go to state 139
+    DIV       shift, and go to state 140
+    MOD       shift, and go to state 142
+    COND_AND  shift, and go to state 144
+
+    $default  reduce using rule 84 (expression)
+
+
+State 186
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   89           | expression COND_AND expression •
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    $default  reduce using rule 89 (expression)
+
+
+State 187
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   85           | expression COND_OR expression •
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    MUL       shift, and go to state 139
+    DIV       shift, and go to state 140
+    MOD       shift, and go to state 142
+    COND_AND  shift, and go to state 144
+
+    $default  reduce using rule 85 (expression)
+
+
+State 188
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+   95           | expression EQUAL expression •
+
+    MUL       shift, and go to state 139
+    DIV       shift, and go to state 140
+    ADD       shift, and go to state 141
+    MOD       shift, and go to state 142
+    SUB       shift, and go to state 143
+    COND_AND  shift, and go to state 144
+    COND_OR   shift, and go to state 145
+
+    $default  reduce using rule 95 (expression)
+
+
+State 189
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   94           | expression NOT_EQUAL expression •
+   95           | expression • EQUAL expression
+
+    MUL       shift, and go to state 139
+    DIV       shift, and go to state 140
+    ADD       shift, and go to state 141
+    MOD       shift, and go to state 142
+    SUB       shift, and go to state 143
+    COND_AND  shift, and go to state 144
+    COND_OR   shift, and go to state 145
+
+    $default  reduce using rule 94 (expression)
+
+
+State 190
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   90           | expression LT expression •
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    MUL       shift, and go to state 139
+    DIV       shift, and go to state 140
+    ADD       shift, and go to state 141
+    MOD       shift, and go to state 142
+    SUB       shift, and go to state 143
+    COND_AND  shift, and go to state 144
+    COND_OR   shift, and go to state 145
+
+    $default  reduce using rule 90 (expression)
+
+
+State 191
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   91           | expression GT expression •
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    MUL       shift, and go to state 139
+    DIV       shift, and go to state 140
+    ADD       shift, and go to state 141
+    MOD       shift, and go to state 142
+    SUB       shift, and go to state 143
+    COND_AND  shift, and go to state 144
+    COND_OR   shift, and go to state 145
+
+    $default  reduce using rule 91 (expression)
+
+
+State 192
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   92           | expression LE expression •
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    MUL       shift, and go to state 139
+    DIV       shift, and go to state 140
+    ADD       shift, and go to state 141
+    MOD       shift, and go to state 142
+    SUB       shift, and go to state 143
+    COND_AND  shift, and go to state 144
+    COND_OR   shift, and go to state 145
+
+    $default  reduce using rule 92 (expression)
+
+
+State 193
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   93           | expression GE expression •
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    MUL       shift, and go to state 139
+    DIV       shift, and go to state 140
+    ADD       shift, and go to state 141
+    MOD       shift, and go to state 142
+    SUB       shift, and go to state 143
+    COND_AND  shift, and go to state 144
+    COND_OR   shift, and go to state 145
+
+    $default  reduce using rule 93 (expression)
+
+
+State 194
+
+   50 statement: IF LPARAM expression RPARAM • statement
+   51          | IF LPARAM expression RPARAM • statement ELSE statement
+
+    ID      shift, and go to state 87
+    LBRACK  shift, and go to state 22
+    THIS    shift, and go to state 47
+    SEMI    shift, and go to state 48
+    PRINT   shift, and go to state 49
+    WHILE   shift, and go to state 50
+    RET     shift, and go to state 51
+    IF      shift, and go to state 52
+
+    block      go to state 53
+    statement  go to state 212
+    name       go to state 59
+
+
+State 195
+
+   47 statement: name LPARAM RPARAM SEMI •
+
+    $default  reduce using rule 47 (statement)
+
+
+State 196
+
+   46 statement: name LPARAM arglist RPARAM • SEMI
+
+    SEMI  shift, and go to state 213
+
+
+State 197
+
+   45 statement: name EQ expression SEMI •
+
+    $default  reduce using rule 45 (statement)
+
+
+State 198
+
+   31 parameterlist: parameterlist error COMMA parameter •
+
+    $default  reduce using rule 31 (parameterlist)
+
+
+State 199
+
+   26 method_declaration: VOID ID LPARAM parameterlist RPARAM block •
+
+    $default  reduce using rule 26 (method_declaration)
+
+
+State 200
+
+   25 method_declaration: type ID LPARAM parameterlist RPARAM block •
+
+    $default  reduce using rule 25 (method_declaration)
+
+
+State 201
+
+   70 elementAccess: elementAccess OSB expression CSB •
+
+    $default  reduce using rule 70 (elementAccess)
+
+
+State 202
+
+   72 nameNoThis: nameNoThis DOT ID •
+
+    $default  reduce using rule 72 (nameNoThis)
+
+
+State 203
+
+   74 arglist: arglist COMMA expression •
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+
+    MUL        shift, and go to state 139
+    DIV        shift, and go to state 140
+    ADD        shift, and go to state 141
+    MOD        shift, and go to state 142
+    SUB        shift, and go to state 143
+    COND_AND   shift, and go to state 144
+    COND_OR    shift, and go to state 145
+    EQUAL      shift, and go to state 146
+    NOT_EQUAL  shift, and go to state 147
+    LT         shift, and go to state 148
+    GT         shift, and go to state 149
+    LE         shift, and go to state 150
+    GE         shift, and go to state 151
+
+    $default  reduce using rule 74 (arglist)
+
+
+State 204
+
+   48 statement: PRINT LPARAM arglist RPARAM SEMI •
+
+    $default  reduce using rule 48 (statement)
+
+
+State 205
+
+   52 statement: WHILE LPARAM expression RPARAM statement •
+
+    $default  reduce using rule 52 (statement)
+
+
+State 206
+
+  101 newexp: ID LPARAM RPARAM •
+
+    $default  reduce using rule 101 (newexp)
+
+
+State 207
+
+   74 arglist: arglist • COMMA expression
+  100 newexp: ID LPARAM arglist • RPARAM
+
+    COMMA   shift, and go to state 170
+    RPARAM  shift, and go to state 214
+
+
+State 208
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+  106 newoexpc: OSB expression • CSB
+
+    CSB        shift, and go to state 215
+    MUL        shift, and go to state 139
+    DIV        shift, and go to state 140
+    ADD        shift, and go to state 141
+    MOD        shift, and go to state 142
+    SUB        shift, and go to state 143
+    COND_AND   shift, and go to state 144
+    COND_OR    shift, and go to state 145
+    EQUAL      shift, and go to state 146
+    NOT_EQUAL  shift, and go to state 147
+    LT         shift, and go to state 148
+    GT         shift, and go to state 149
+    LE         shift, and go to state 150
+    GE         shift, and go to state 151
+
+
+State 209
+
+   58 multibrackets: OSB • CSB
+  107 newoexpc: newoexpc OSB • expression CSB
+
+    ID      shift, and go to state 87
+    NUM     shift, and go to state 88
+    THIS    shift, and go to state 47
+    LPARAM  shift, and go to state 89
+    CSB     shift, and go to state 75
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    ADD     shift, and go to state 94
+    SUB     shift, and go to state 95
+    NOT     shift, and go to state 96
+
+    name        go to state 97
+    expression  go to state 216
+    unaryop     go to state 99
+
+
+State 210
+
+   59 multibrackets: multibrackets • OSB CSB
+  104 newexp: simpletype newoexpc multibrackets •
+
+    OSB  shift, and go to state 76
+
+    $default  reduce using rule 104 (newexp)
+
+
+State 211
+
+   79 expression: name LPARAM arglist RPARAM •
+
+    $default  reduce using rule 79 (expression)
+
+
+State 212
+
+   50 statement: IF LPARAM expression RPARAM statement •
+   51          | IF LPARAM expression RPARAM statement • ELSE statement
+
+    ELSE  shift, and go to state 217
+
+    $default  reduce using rule 50 (statement)
+
+
+State 213
+
+   46 statement: name LPARAM arglist RPARAM SEMI •
+
+    $default  reduce using rule 46 (statement)
+
+
+State 214
+
+  100 newexp: ID LPARAM arglist RPARAM •
+
+    $default  reduce using rule 100 (newexp)
+
+
+State 215
+
+  106 newoexpc: OSB expression CSB •
+
+    $default  reduce using rule 106 (newoexpc)
+
+
+State 216
+
+   83 expression: expression • ADD expression
+   84           | expression • SUB expression
+   85           | expression • COND_OR expression
+   86           | expression • MUL expression
+   87           | expression • DIV expression
+   88           | expression • MOD expression
+   89           | expression • COND_AND expression
+   90           | expression • LT expression
+   91           | expression • GT expression
+   92           | expression • LE expression
+   93           | expression • GE expression
+   94           | expression • NOT_EQUAL expression
+   95           | expression • EQUAL expression
+  107 newoexpc: newoexpc OSB expression • CSB
+
+    CSB        shift, and go to state 218
+    MUL        shift, and go to state 139
+    DIV        shift, and go to state 140
+    ADD        shift, and go to state 141
+    MOD        shift, and go to state 142
+    SUB        shift, and go to state 143
+    COND_AND   shift, and go to state 144
+    COND_OR    shift, and go to state 145
+    EQUAL      shift, and go to state 146
+    NOT_EQUAL  shift, and go to state 147
+    LT         shift, and go to state 148
+    GT         shift, and go to state 149
+    LE         shift, and go to state 150
+    GE         shift, and go to state 151
+
+
+State 217
+
+   51 statement: IF LPARAM expression RPARAM statement ELSE • statement
+
+    ID      shift, and go to state 87
+    LBRACK  shift, and go to state 22
+    THIS    shift, and go to state 47
+    SEMI    shift, and go to state 48
+    PRINT   shift, and go to state 49
+    WHILE   shift, and go to state 50
+    RET     shift, and go to state 51
+    IF      shift, and go to state 52
+
+    block      go to state 53
+    statement  go to state 219
+    name       go to state 59
+
+
+State 218
+
+  107 newoexpc: newoexpc OSB expression CSB •
+
+    $default  reduce using rule 107 (newoexpc)
+
+
+State 219
+
+   51 statement: IF LPARAM expression RPARAM statement ELSE statement •
+
+    $default  reduce using rule 51 (statement)
