@@ -285,7 +285,7 @@ class Name : public Node {
   virtual int accept(NodeVisitor & visitor);
 //protected:
     int option;
-
+    Node * elAcc = 0;
     Node * name = 0;
     Node * exp = 0;
 };
@@ -427,4 +427,9 @@ class ElementAccess : public Node {
     Node * child; // expression
 };
 
+class ExpressionList : public NodeList {
+  public:
+    ExpressionList();
+    int accept(NodeVisitor & visitor);
+};
 #endif

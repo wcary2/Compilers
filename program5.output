@@ -132,11 +132,10 @@ Grammar
   101       | ID LPARAM RPARAM
   102       | simpletype
   103       | simpletype newoexpc
-  104       | simpletype newoexpc multibrackets
-  105       | simpletype multibrackets
+  104       | simpletype newoexpc OSB CSB
 
-  106 newoexpc: OSB expression CSB
-  107         | newoexpc OSB expression CSB
+  105 newoexpc: OSB expression CSB
+  106         | newoexpc OSB expression CSB
 
 
 Terminals, with rules where they appear
@@ -155,14 +154,14 @@ Terminals, with rules where they appear
     LPARAM (267) 18 19 23 24 25 26 46 47 48 49 50 51 52 77 79 80 96 100 101
     RPARAM (268) 18 19 23 24 25 26 46 47 48 49 50 51 52 77 79 80 96 100 101
     SEMI (269) 12 13 14 39 40 44 45 46 47 48 49 53 54 67 68
-    CSB (270) 58 59 69 70 106 107
+    CSB (270) 58 59 69 70 104 105 106
     VOID (271) 24 26 28
     PRINT (272) 48 49
     ELSE (273) 51
     WHILE (274) 52
     RET (275) 53 54
     IF (276) 50 51
-    OSB (277) 58 59 69 70 106 107
+    OSB (277) 58 59 69 70 104 105 106
     NLL (278) 78
     READ (279) 77
     NEW (280) 81
@@ -238,10 +237,10 @@ Nonterminals, with rules where they appear
         on right: 12 13 23 25 27 32 39
     multibrackets <nt> (59)
         on left: 58 59
-        on right: 57 59 104 105
+        on right: 57 59
     simpletype <nt> (60)
         on left: 60 61
-        on right: 56 57 102 103 104 105
+        on right: 56 57 102 103 104
     name <nt> (61)
         on left: 62 63 64 65 66 67 68
         on right: 45 46 47 66 76 79 80
@@ -256,16 +255,16 @@ Nonterminals, with rules where they appear
         on right: 46 48 74 79 100
     expression <nt> (65)
         on left: 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96
-        on right: 45 50 51 52 53 69 70 73 74 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 106 107
+        on right: 45 50 51 52 53 69 70 73 74 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 105 106
     unaryop <nt> (66)
         on left: 97 98 99
         on right: 82
     newexp <nt> (67)
-        on left: 100 101 102 103 104 105
+        on left: 100 101 102 103 104
         on right: 81
     newoexpc <nt> (68)
-        on left: 106 107
-        on right: 103 104 107
+        on left: 105 106
+        on right: 103 104 106
 
 
 State 0
@@ -1844,15 +1843,13 @@ State 135
 
   102 newexp: simpletype •
   103       | simpletype • newoexpc
-  104       | simpletype • newoexpc multibrackets
-  105       | simpletype • multibrackets
+  104       | simpletype • newoexpc OSB CSB
 
     OSB  shift, and go to state 176
 
     $default  reduce using rule 102 (newexp)
 
-    multibrackets  go to state 177
-    newoexpc       go to state 178
+    newoexpc  go to state 177
 
 
 State 136
@@ -1871,7 +1868,7 @@ State 137
     NUM     shift, and go to state 88
     THIS    shift, and go to state 47
     LPARAM  shift, and go to state 89
-    RPARAM  shift, and go to state 179
+    RPARAM  shift, and go to state 178
     NLL     shift, and go to state 91
     READ    shift, and go to state 92
     NEW     shift, and go to state 93
@@ -1880,7 +1877,7 @@ State 137
     NOT     shift, and go to state 96
 
     name        go to state 97
-    arglist     go to state 180
+    arglist     go to state 179
     expression  go to state 130
     unaryop     go to state 99
 
@@ -1908,7 +1905,7 @@ State 139
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 181
+    expression  go to state 180
     unaryop     go to state 99
 
 
@@ -1928,7 +1925,7 @@ State 140
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 182
+    expression  go to state 181
     unaryop     go to state 99
 
 
@@ -1948,7 +1945,7 @@ State 141
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 183
+    expression  go to state 182
     unaryop     go to state 99
 
 
@@ -1968,7 +1965,7 @@ State 142
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 184
+    expression  go to state 183
     unaryop     go to state 99
 
 
@@ -1988,7 +1985,7 @@ State 143
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 185
+    expression  go to state 184
     unaryop     go to state 99
 
 
@@ -2008,7 +2005,7 @@ State 144
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 186
+    expression  go to state 185
     unaryop     go to state 99
 
 
@@ -2028,7 +2025,7 @@ State 145
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 187
+    expression  go to state 186
     unaryop     go to state 99
 
 
@@ -2048,7 +2045,7 @@ State 146
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 188
+    expression  go to state 187
     unaryop     go to state 99
 
 
@@ -2068,7 +2065,7 @@ State 147
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 189
+    expression  go to state 188
     unaryop     go to state 99
 
 
@@ -2088,7 +2085,7 @@ State 148
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 190
+    expression  go to state 189
     unaryop     go to state 99
 
 
@@ -2108,7 +2105,7 @@ State 149
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 191
+    expression  go to state 190
     unaryop     go to state 99
 
 
@@ -2128,7 +2125,7 @@ State 150
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 192
+    expression  go to state 191
     unaryop     go to state 99
 
 
@@ -2148,7 +2145,7 @@ State 151
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 193
+    expression  go to state 192
     unaryop     go to state 99
 
 
@@ -2190,7 +2187,7 @@ State 153
    94           | expression • NOT_EQUAL expression
    95           | expression • EQUAL expression
 
-    RPARAM     shift, and go to state 194
+    RPARAM     shift, and go to state 193
     MUL        shift, and go to state 139
     DIV        shift, and go to state 140
     ADD        shift, and go to state 141
@@ -2224,7 +2221,7 @@ State 156
 
    47 statement: name LPARAM RPARAM • SEMI
 
-    SEMI  shift, and go to state 195
+    SEMI  shift, and go to state 194
 
 
 State 157
@@ -2233,7 +2230,7 @@ State 157
    74 arglist: arglist • COMMA expression
 
     COMMA   shift, and go to state 170
-    RPARAM  shift, and go to state 196
+    RPARAM  shift, and go to state 195
 
 
 State 158
@@ -2253,7 +2250,7 @@ State 158
    94           | expression • NOT_EQUAL expression
    95           | expression • EQUAL expression
 
-    SEMI       shift, and go to state 197
+    SEMI       shift, and go to state 196
     MUL        shift, and go to state 139
     DIV        shift, and go to state 140
     ADD        shift, and go to state 141
@@ -2276,7 +2273,7 @@ State 159
     ID   shift, and go to state 37
     INT  shift, and go to state 12
 
-    parameter   go to state 198
+    parameter   go to state 197
     type        go to state 63
     simpletype  go to state 20
 
@@ -2308,7 +2305,7 @@ State 163
 
     LBRACK  shift, and go to state 22
 
-    block  go to state 199
+    block  go to state 198
 
 
 State 164
@@ -2324,7 +2321,7 @@ State 165
 
     LBRACK  shift, and go to state 22
 
-    block  go to state 200
+    block  go to state 199
 
 
 State 166
@@ -2351,7 +2348,7 @@ State 167
    94           | expression • NOT_EQUAL expression
    95           | expression • EQUAL expression
 
-    CSB        shift, and go to state 201
+    CSB        shift, and go to state 200
     MUL        shift, and go to state 139
     DIV        shift, and go to state 140
     ADD        shift, and go to state 141
@@ -2371,7 +2368,7 @@ State 168
 
    72 nameNoThis: nameNoThis DOT • ID
 
-    ID  shift, and go to state 202
+    ID  shift, and go to state 201
 
 
 State 169
@@ -2397,7 +2394,7 @@ State 170
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 203
+    expression  go to state 202
     unaryop     go to state 99
 
 
@@ -2405,7 +2402,7 @@ State 171
 
    48 statement: PRINT LPARAM arglist RPARAM • SEMI
 
-    SEMI  shift, and go to state 204
+    SEMI  shift, and go to state 203
 
 
 State 172
@@ -2422,7 +2419,7 @@ State 172
     IF      shift, and go to state 52
 
     block      go to state 53
-    statement  go to state 205
+    statement  go to state 204
     name       go to state 59
 
 
@@ -2449,7 +2446,7 @@ State 175
     NUM     shift, and go to state 88
     THIS    shift, and go to state 47
     LPARAM  shift, and go to state 89
-    RPARAM  shift, and go to state 206
+    RPARAM  shift, and go to state 205
     NLL     shift, and go to state 91
     READ    shift, and go to state 92
     NEW     shift, and go to state 93
@@ -2458,21 +2455,19 @@ State 175
     NOT     shift, and go to state 96
 
     name        go to state 97
-    arglist     go to state 207
+    arglist     go to state 206
     expression  go to state 130
     unaryop     go to state 99
 
 
 State 176
 
-   58 multibrackets: OSB • CSB
-  106 newoexpc: OSB • expression CSB
+  105 newoexpc: OSB • expression CSB
 
     ID      shift, and go to state 87
     NUM     shift, and go to state 88
     THIS    shift, and go to state 47
     LPARAM  shift, and go to state 89
-    CSB     shift, and go to state 75
     NLL     shift, and go to state 91
     READ    shift, and go to state 92
     NEW     shift, and go to state 93
@@ -2481,50 +2476,38 @@ State 176
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 208
+    expression  go to state 207
     unaryop     go to state 99
 
 
 State 177
 
-   59 multibrackets: multibrackets • OSB CSB
-  105 newexp: simpletype multibrackets •
-
-    OSB  shift, and go to state 76
-
-    $default  reduce using rule 105 (newexp)
-
-
-State 178
-
   103 newexp: simpletype newoexpc •
-  104       | simpletype newoexpc • multibrackets
-  107 newoexpc: newoexpc • OSB expression CSB
+  104       | simpletype newoexpc • OSB CSB
+  106 newoexpc: newoexpc • OSB expression CSB
 
-    OSB  shift, and go to state 209
+    OSB  shift, and go to state 208
 
     $default  reduce using rule 103 (newexp)
 
-    multibrackets  go to state 210
 
-
-State 179
+State 178
 
    80 expression: name LPARAM RPARAM •
 
     $default  reduce using rule 80 (expression)
 
 
-State 180
+State 179
 
    74 arglist: arglist • COMMA expression
    79 expression: name LPARAM arglist • RPARAM
 
     COMMA   shift, and go to state 170
-    RPARAM  shift, and go to state 211
+    RPARAM  shift, and go to state 209
 
 
-State 181
+State 180
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2544,7 +2527,7 @@ State 181
     $default  reduce using rule 86 (expression)
 
 
-State 182
+State 181
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2564,7 +2547,7 @@ State 182
     $default  reduce using rule 87 (expression)
 
 
-State 183
+State 182
 
    83 expression: expression • ADD expression
    83           | expression ADD expression •
@@ -2589,7 +2572,7 @@ State 183
     $default  reduce using rule 83 (expression)
 
 
-State 184
+State 183
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2609,7 +2592,7 @@ State 184
     $default  reduce using rule 88 (expression)
 
 
-State 185
+State 184
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2634,7 +2617,7 @@ State 185
     $default  reduce using rule 84 (expression)
 
 
-State 186
+State 185
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2654,7 +2637,7 @@ State 186
     $default  reduce using rule 89 (expression)
 
 
-State 187
+State 186
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2679,7 +2662,7 @@ State 187
     $default  reduce using rule 85 (expression)
 
 
-State 188
+State 187
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2707,7 +2690,7 @@ State 188
     $default  reduce using rule 95 (expression)
 
 
-State 189
+State 188
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2735,7 +2718,7 @@ State 189
     $default  reduce using rule 94 (expression)
 
 
-State 190
+State 189
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2763,7 +2746,7 @@ State 190
     $default  reduce using rule 90 (expression)
 
 
-State 191
+State 190
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2791,7 +2774,7 @@ State 191
     $default  reduce using rule 91 (expression)
 
 
-State 192
+State 191
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2819,7 +2802,7 @@ State 192
     $default  reduce using rule 92 (expression)
 
 
-State 193
+State 192
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -2847,7 +2830,7 @@ State 193
     $default  reduce using rule 93 (expression)
 
 
-State 194
+State 193
 
    50 statement: IF LPARAM expression RPARAM • statement
    51          | IF LPARAM expression RPARAM • statement ELSE statement
@@ -2862,67 +2845,67 @@ State 194
     IF      shift, and go to state 52
 
     block      go to state 53
-    statement  go to state 212
+    statement  go to state 210
     name       go to state 59
 
 
-State 195
+State 194
 
    47 statement: name LPARAM RPARAM SEMI •
 
     $default  reduce using rule 47 (statement)
 
 
-State 196
+State 195
 
    46 statement: name LPARAM arglist RPARAM • SEMI
 
-    SEMI  shift, and go to state 213
+    SEMI  shift, and go to state 211
 
 
-State 197
+State 196
 
    45 statement: name EQ expression SEMI •
 
     $default  reduce using rule 45 (statement)
 
 
-State 198
+State 197
 
    31 parameterlist: parameterlist error COMMA parameter •
 
     $default  reduce using rule 31 (parameterlist)
 
 
-State 199
+State 198
 
    26 method_declaration: VOID ID LPARAM parameterlist RPARAM block •
 
     $default  reduce using rule 26 (method_declaration)
 
 
-State 200
+State 199
 
    25 method_declaration: type ID LPARAM parameterlist RPARAM block •
 
     $default  reduce using rule 25 (method_declaration)
 
 
-State 201
+State 200
 
    70 elementAccess: elementAccess OSB expression CSB •
 
     $default  reduce using rule 70 (elementAccess)
 
 
-State 202
+State 201
 
    72 nameNoThis: nameNoThis DOT ID •
 
     $default  reduce using rule 72 (nameNoThis)
 
 
-State 203
+State 202
 
    74 arglist: arglist COMMA expression •
    83 expression: expression • ADD expression
@@ -2956,37 +2939,37 @@ State 203
     $default  reduce using rule 74 (arglist)
 
 
-State 204
+State 203
 
    48 statement: PRINT LPARAM arglist RPARAM SEMI •
 
     $default  reduce using rule 48 (statement)
 
 
-State 205
+State 204
 
    52 statement: WHILE LPARAM expression RPARAM statement •
 
     $default  reduce using rule 52 (statement)
 
 
-State 206
+State 205
 
   101 newexp: ID LPARAM RPARAM •
 
     $default  reduce using rule 101 (newexp)
 
 
-State 207
+State 206
 
    74 arglist: arglist • COMMA expression
   100 newexp: ID LPARAM arglist • RPARAM
 
     COMMA   shift, and go to state 170
-    RPARAM  shift, and go to state 214
+    RPARAM  shift, and go to state 212
 
 
-State 208
+State 207
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -3001,9 +2984,9 @@ State 208
    93           | expression • GE expression
    94           | expression • NOT_EQUAL expression
    95           | expression • EQUAL expression
-  106 newoexpc: OSB expression • CSB
+  105 newoexpc: OSB expression • CSB
 
-    CSB        shift, and go to state 215
+    CSB        shift, and go to state 213
     MUL        shift, and go to state 139
     DIV        shift, and go to state 140
     ADD        shift, and go to state 141
@@ -3019,16 +3002,16 @@ State 208
     GE         shift, and go to state 151
 
 
-State 209
+State 208
 
-   58 multibrackets: OSB • CSB
-  107 newoexpc: newoexpc OSB • expression CSB
+  104 newexp: simpletype newoexpc OSB • CSB
+  106 newoexpc: newoexpc OSB • expression CSB
 
     ID      shift, and go to state 87
     NUM     shift, and go to state 88
     THIS    shift, and go to state 47
     LPARAM  shift, and go to state 89
-    CSB     shift, and go to state 75
+    CSB     shift, and go to state 214
     NLL     shift, and go to state 91
     READ    shift, and go to state 92
     NEW     shift, and go to state 93
@@ -3037,59 +3020,56 @@ State 209
     NOT     shift, and go to state 96
 
     name        go to state 97
-    expression  go to state 216
+    expression  go to state 215
     unaryop     go to state 99
 
 
-State 210
-
-   59 multibrackets: multibrackets • OSB CSB
-  104 newexp: simpletype newoexpc multibrackets •
-
-    OSB  shift, and go to state 76
-
-    $default  reduce using rule 104 (newexp)
-
-
-State 211
+State 209
 
    79 expression: name LPARAM arglist RPARAM •
 
     $default  reduce using rule 79 (expression)
 
 
-State 212
+State 210
 
    50 statement: IF LPARAM expression RPARAM statement •
    51          | IF LPARAM expression RPARAM statement • ELSE statement
 
-    ELSE  shift, and go to state 217
+    ELSE  shift, and go to state 216
 
     $default  reduce using rule 50 (statement)
 
 
-State 213
+State 211
 
    46 statement: name LPARAM arglist RPARAM SEMI •
 
     $default  reduce using rule 46 (statement)
 
 
-State 214
+State 212
 
   100 newexp: ID LPARAM arglist RPARAM •
 
     $default  reduce using rule 100 (newexp)
 
 
+State 213
+
+  105 newoexpc: OSB expression CSB •
+
+    $default  reduce using rule 105 (newoexpc)
+
+
+State 214
+
+  104 newexp: simpletype newoexpc OSB CSB •
+
+    $default  reduce using rule 104 (newexp)
+
+
 State 215
-
-  106 newoexpc: OSB expression CSB •
-
-    $default  reduce using rule 106 (newoexpc)
-
-
-State 216
 
    83 expression: expression • ADD expression
    84           | expression • SUB expression
@@ -3104,9 +3084,9 @@ State 216
    93           | expression • GE expression
    94           | expression • NOT_EQUAL expression
    95           | expression • EQUAL expression
-  107 newoexpc: newoexpc OSB expression • CSB
+  106 newoexpc: newoexpc OSB expression • CSB
 
-    CSB        shift, and go to state 218
+    CSB        shift, and go to state 217
     MUL        shift, and go to state 139
     DIV        shift, and go to state 140
     ADD        shift, and go to state 141
@@ -3122,7 +3102,7 @@ State 216
     GE         shift, and go to state 151
 
 
-State 217
+State 216
 
    51 statement: IF LPARAM expression RPARAM statement ELSE • statement
 
@@ -3136,18 +3116,18 @@ State 217
     IF      shift, and go to state 52
 
     block      go to state 53
-    statement  go to state 219
+    statement  go to state 218
     name       go to state 59
 
 
+State 217
+
+  106 newoexpc: newoexpc OSB expression CSB •
+
+    $default  reduce using rule 106 (newoexpc)
+
+
 State 218
-
-  107 newoexpc: newoexpc OSB expression CSB •
-
-    $default  reduce using rule 107 (newoexpc)
-
-
-State 219
 
    51 statement: IF LPARAM expression RPARAM statement ELSE statement •
 

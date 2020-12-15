@@ -441,7 +441,7 @@ Name::Name(string id){
 }
 
 Name::Name(Node * n, string id){
-  name = n;
+  elAcc = n;
   identifier = id;
   option = 3;
   val = "<Name> -> ";
@@ -877,5 +877,14 @@ ElementAccess::ElementAccess(Node * n) {
 }
 
 int ElementAccess::accept(NodeVisitor & visitor) {
+  return visitor.visit(*this);
+}
+
+
+/* ExpressionList */
+
+ExpressionList::ExpressionList() {}
+
+int ExpressionList::accept(NodeVisitor & visitor) {
   return visitor.visit(*this);
 }

@@ -1,0 +1,30 @@
+class A {
+  int f;
+  int foo() {
+    int l;
+  }
+  int foo(int r){
+    int l;
+  }
+}
+
+class C {
+  int a;
+  int b;
+  int c;
+  A test;
+  B hard;
+  C(){
+    a = test.foo();
+    b = test.foo(c);
+    c = hard.foo();
+  }
+}
+
+class B {
+  int a;
+  int b;
+  void foo(){
+    int r; 
+  }
+}

@@ -175,6 +175,7 @@ int SymbolTableBuilder::visit(VarDec & node){
 		errors.push_back(make_tuple(get<0>(varConstruction), name));
 	}
 	sym.type = get<0>(varConstruction);
+	sym.rType = get<0>(varConstruction);
 	for(int i=0; i < get<1>(varConstruction); i++){
 		sym.arrSize.push_back(0);
 	}
@@ -423,6 +424,7 @@ int SymbolTableBuilder::visit(LocalVarDec & node){
 		errors.push_back(make_tuple(get<0>(varConstruction), name));
 	}
 	sym.type = get<0>(varConstruction);
+	sym.rType = get<0>(varConstruction);
 	for(int i=0; i < get<1>(varConstruction); i++){
 		sym.arrSize.push_back(0);
 	}
@@ -444,26 +446,41 @@ int SymbolTableBuilder::visit(Statement & node){
 
 int SymbolTableBuilder::visit(AssignStatement & node){
   rType = "NONE"; // To check if it doesn't change
+	arrNum = 0;
+	assemName = "";
+	string rightType = "";
 	int r = node.name->accept(*this);
 	if(r == -4){
 		errorStats.push_back(&node);
 		return -1;
 	}
-	if(r != 0){
+	if(r < 0){
 		printNameError(r);
 		return -1;
 	}
-	string leftType = symt.lookup(assemName).type;
-	r = node.exp->accept(*this);
-
-	if(r != 0){
-		printNameError(r);
-		return -1;
-	}
+	Symbol leftSym = symt.lookup(assemName);
+	string leftType = leftSym.type;
 	assemName = "";
-	if(leftType.compare(rType) != 0){
-		cerr << "Types do not match in assign statement: " << leftType 
-			<< " and " << rType << " for variable " << assemName << endl;
+	r = node.exp->accept(*this);
+	if(arrNum > 0){
+		if(leftSym.arrSize.size() != arrNum){
+			cerr << "Error: the variable " << leftSym.value << " does not have the "
+				<< "same array dimensions as its r-value in " << currentScope << endl;
+				return -1;
+		}
+	}
+	Symbol sym = symt.lookup(assemName);
+	rightType = sym.rType;
+	if(rightType.compare("@None") == 0){
+		rightType = rType;
+	}
+	if(r < 0){
+		printNameError(r);
+		return -1;
+	}
+	if(leftType.compare(rightType) != 0){
+		cerr << "Error: Type mismatch " << leftType 
+			<< " and " << rightType << " for variable " << assemName << endl;
 		return -1;
 	}
 	
@@ -475,6 +492,16 @@ int SymbolTableBuilder::visit(FuncCallStatement & node){
 }
 
 int SymbolTableBuilder::visit(PrintStatement & node){
+	assemName = "";
+	node.argChild->accept(*this);
+	rType = "void";
+	for(auto t : argTypes){
+		if(t.compare("int") != 0) {
+			cerr << "Error: at " << currentScope << " print(...) expected int"
+				<< " but got " << t << endl; 
+				return -1;
+		}
+	}
 	return 0;
 }
 
@@ -528,6 +555,11 @@ int SymbolTableBuilder::visit(Name & node){
 					assemName = scope + "@" + node.getIdent();
 				}
 			}
+			// check class scope for variable 
+			if(symt.lookup(classScope + "@" + node.getIdent()).notFound == false){
+				found = true;
+				assemName = classScope + "@" + node.getIdent();
+			}
 			// check class scope if cant be found in enclosing scopes
 			if(!found){
 				// check if there exists a method in the current scope by the name
@@ -537,9 +569,18 @@ int SymbolTableBuilder::visit(Name & node){
 						return 1;
 					}
 				}
-				Symbol sym = symt.lookup(classScope + "@" + node.getIdent());
-				if(sym.notFound){
+				//check if its a constructor
+				Symbol sym = symt.lookup("@" + node.getIdent());
+				if(!sym.notFound){
+					assemName = "@" + node.getIdent() + "@" + node.getIdent();
+					return 0;
+				}
+				if(symt.lookup("@" + sym.type).notFound){
 					return -4;
+				}
+				if(sym.notFound){
+					assemName = classScope + "@" + node.getIdent();
+					return -1;
 				}
 				assemName = classScope + "@" + node.getIdent();
 			}
@@ -556,6 +597,7 @@ int SymbolTableBuilder::visit(Name & node){
 						return 1;
 					}
 				}
+				assemName = tmpScope + "@" + node.getIdent();
 				return -1;
 			}
 			assemName = tmpScope + "@" + node.getIdent();
@@ -589,6 +631,7 @@ int SymbolTableBuilder::visit(Expression & node){
 		rType = "int";
 	}
 	else {
+		assemName = "";
 		node.name->accept(*this);
 		Symbol sym = symt.lookup(assemName);
 		rType = sym.rType;
@@ -597,29 +640,124 @@ int SymbolTableBuilder::visit(Expression & node){
 }
 
 int SymbolTableBuilder::visit(ArgList & node){
+	argTypes.empty();
+	string args = "";
 	for(int i = 0; i < node.size(); i++){
 		node.at(i)->accept(*this);
+		args += rType + "&";
+		argTypes.push_back(rType);
 	}
+	assemName = args;
 	return 0;
 }
 
+/*
+ * returns 0 if successful
+ * returns -1 if mismatch
+ * returns -2 if function is constructor
+*/
 int SymbolTableBuilder::visit(FuncExp & node){
+	// make assemName empty
+	assemName = "";
+	int r = node.name->accept(*this);
+	if(r < 0){
+		return r;
+	}
+	string funcName = assemName;
+	funcName += "#";
+	if(node.argChild->size() != 0) {
+		r = node.argChild->accept(*this);
+		//funcName += rType + "&";
+		funcName += assemName;
+		if(r < 0) return r;
+	}
+	funcName += "#";
+	Symbol sym = symt.lookup(funcName);
+	assemName = funcName;
+	// TODO add check to see if return type exists
+	if(sym.notFound){
+		cerr << "Error: Function not found in current symbol table " << assemName
+			<< " in function expression" << endl;
+		return -1;
+	}
+	if(sym.order.compare("constr") == 0){
+		cerr << "Error: Must use constructor " << funcName << " with new keyword" 
+			<< endl;
+		return -2; 
+	}
+	rType = sym.rType;
 	return 0;
 }
 
 int SymbolTableBuilder::visit(ReadExp & node){
+	rType = "int";
 	return 0;
 }
 
 int SymbolTableBuilder::visit(NewExp & node){
+	assemName = "";
+	node.nexp->accept(*this);
 	return 0;
 }
-
+/*
+ * returns 0 when successful
+ * returns -1 when the brackets don't follow the rules
+ * returns -2 when the constructor cannot be found
+*/
 int SymbolTableBuilder::visit(Nexp & node){
+	arrNum = 0;
+	if(node.st != 0){
+		// get simple type as rType 
+		// this means array
+		
+		// check that there is only one sq without exp
+		if((node.expList->size() - node.sqList->size()) > 1){
+			cerr << "Error: There can only be one empty left most square bracket"
+				<< endl;
+				return -1;
+		}
+		// check that the type exists
+		Symbol sym = symt.lookup("@" + rType);
+		if(sym.notFound){
+			// -4 will be the value that stores the node until all classes are processed
+			//TODO make this check at the end again
+			cerr << "Error: Could not find type " << rType << endl;
+			return -4;
+		}
+		int r = node.expList->accept(*this);
+		if(r < 0){
+			return r;
+		}
+		arrNum = node.expList->size() + node.sqList->size();
+		rType = node.st->getIdent();
+	} else {
+		// this means not array
+		// else it is in the Nexp node
+		rType = node.getIdent();
+		string constrName = "@" + rType + "@" + rType + "#";
+		if(node.argChild->size() != 0){
+			node.argChild->accept(*this);
+			constrName += assemName;
+		}
+		constrName += "#";
+		// Find in symbol table
+		Symbol sym = symt.lookup(constrName);
+		if(sym.notFound){
+			//TODO make this check at the end again
+			cerr << "Could not find constructor " << constrName << endl;
+			return -2;
+		}
+		return 0;
+
+	}
+	//check if constructor
+	
 	return 0;
 }
 
 int SymbolTableBuilder::visit(SqExp & node){
+	assemName = "";
+	node.exp->accept(*this);
 	return 0;
 }
 
@@ -627,11 +765,59 @@ int SymbolTableBuilder::visit(Sq & node){
 	return 0;
 }
 
+int SymbolTableBuilder::visit(ExpressionList & node){
+	for(auto n : node.list){
+		n->accept(*this);
+		if(rType.compare("int") != 0){
+			cerr << "Error: Expression inside square bracket must be an int" << endl;
+			return -6;
+		}
+	}
+	return 0;
+}
+/*
+ * Returns -5 if there is an error.
+*/
 int SymbolTableBuilder::visit(BinaryExp & node){
+	string relational[] = {"<", ">", "<=", ">=", "!="};
+	assemName = "";
+	int r = node.left->accept(*this);
+	if(r < 0){
+		return -5; 
+	}
+	string leftType = rType;
+	r = node.left->accept(*this);
+	if(r < 0) {
+		return -5;
+	}
+	r = node.right->accept(*this);
+	string rightType = rType;
+	if(node.identifier.compare("==") == 0){
+		rType = "int";
+		return 0;
+	}
+	if(leftType.compare("int") == 0 && rightType.compare("int") == 0){
+		rType = "int";
+		return 0;
+	}
+	else {
+		cerr << "Error: binary expression must use type int in method "
+			<< currentScope << endl;
+		return -5;
+	}
 	return 0;
 }
 
 int SymbolTableBuilder::visit(UnaryExp & node){
+	assemName = "";
+	int r = node.exp->accept(*this);
+	if(r < 0){
+		return -5;
+	}
+	if(rType.compare("int") != 0) {
+		cerr << "Error: Unary operator must take an int at " << currentScope
+			<< " as " << rType << endl;
+	}
 	return 0;
 }
 
@@ -640,6 +826,8 @@ int SymbolTableBuilder::visit(UnaryOp & node){
 }
 
 int SymbolTableBuilder::visit(ParanExp & node){
+	assemName = "";
+	node.exp->accept(*this);
 	return 0;
 }
 

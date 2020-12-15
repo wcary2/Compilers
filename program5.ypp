@@ -292,7 +292,9 @@ name:
   | ID {
     $$ = new Name($1->getIdent());
   }
-  | ID elementAccess {}
+  | ID elementAccess {
+    $$ = new Name($2, $1->getIdent());
+  }
   | THIS DOT nameNoThis {
     $$ = new Name(new Name("this"),$3);
   }
@@ -384,7 +386,7 @@ newexp:
     $$ = new Nexp($1->getIdent(), $3);
   }
   | ID LPARAM RPARAM {
-    $$ = new Nexp($1->getIdent());
+    $$ = new Nexp($1->getIdent(), new NodeList());
   }
   | simpletype {
     $$ = new Nexp($1);
@@ -392,17 +394,16 @@ newexp:
   | simpletype newoexpc {
     $$ = new Nexp($1, $2, new NodeList());
   }
-  | simpletype newoexpc multibrackets {
-    $$ = new Nexp($1, $2, $3);
-  }
-  | simpletype multibrackets {
-    $$ = new Nexp($1, new NodeList(), $2);
+  | simpletype newoexpc OSB CSB {
+    Node * lastSq = new NodeList();
+    lastSq->push_back(0);
+    $$ = new Nexp($1, $2, lastSq);
   }
 ;
 
 newoexpc:
   OSB expression CSB  {
-    $$ = new NodeList();
+    $$ = new ExpressionList();
     $$->push_back(new SqExp($2)); 
   } 
   | newoexpc OSB expression CSB {

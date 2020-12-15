@@ -18,6 +18,8 @@ Symbol::Symbol(const Symbol & sym){
   notFound = sym.notFound;
   arrSize = sym.arrSize;
   params = sym.params;
+  methods = sym.methods;
+  vars = sym.vars;
 }
 
 Symbol::Symbol(string val_, string type_, string order_, string rType_,

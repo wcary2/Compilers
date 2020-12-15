@@ -1,0 +1,15 @@
+class A {
+  int a;
+  A() {
+    a = 2;
+  }
+}
+
+class B {
+  A test;
+  int b; 
+  int foo(){
+    test = new A();
+  }
+}
+

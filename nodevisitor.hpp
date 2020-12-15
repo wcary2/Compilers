@@ -49,6 +49,7 @@ class FuncExp;
 class ReadExp;
 class NewExp;
 class Nexp;
+class ExpressionList;
 class SqExp;
 class Sq;
 class BinaryExp;
@@ -122,6 +123,12 @@ class SymbolTableBuilder : protected NodeVisitor {
   vector<string> enclosingBlocks;
   // the current symbol returned from name
   vector<Node *> errorStats;
+  // boolean value returned for binary expression
+  bool isBool;
+  // the types in the arg list 
+  vector<string> argTypes;
+  // the number of arrays
+  int arrNum = 0;
   int blockCount = 0;
   bool mainfunc = false;
   vector<int> bCount;  // maintains current block
@@ -166,6 +173,7 @@ public:
   int visit(NewExp & node);
   int visit(Nexp & node);
   int visit(SqExp & node);
+  int visit(ExpressionList & node);
   int visit(Sq & node);
   int visit(BinaryExp & node);
   int visit(UnaryExp & node);
