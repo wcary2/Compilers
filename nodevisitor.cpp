@@ -305,6 +305,7 @@ int SymbolTableBuilder::visit(MethodDec & node){
   blockCount = 1;
 	//cout << "Modifying current scope from " << currentScope << " to " << name << endl;
 	currentScope = name;
+	methScope = name;
 	node.block->accept(*this);
   blockCount = 0;
 	//cout << "Returning current scope from " << currentScope << " to " << classScope << endl;
@@ -543,6 +544,17 @@ int SymbolTableBuilder::visit(WhileStatement & node){
 
 int SymbolTableBuilder::visit(ReturnStatement & node){
 	//TODO 
+	Symbol method = symt.lookup(methScope);
+	assemName = "";
+	if(node.exp != 0){
+		node.exp->accept(*this);
+		if(method.rType.compare(rType) != 0){
+			cerr << "Error: Return statement must match method declaration in "
+				<< methScope << " Expected " << method.rType << " but received "
+				<< rType << endl;
+			return -1;
+		}
+	}
 	return 0;
 }
 

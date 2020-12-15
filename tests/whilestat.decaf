@@ -10,10 +10,10 @@ class A {
     while(2){
       foo();
       if(1){
-        return;
+        return b;
       }
       else {
-        if(b){
+        if(2){
           foo();
         }
       }

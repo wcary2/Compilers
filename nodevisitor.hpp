@@ -129,6 +129,8 @@ class SymbolTableBuilder : protected NodeVisitor {
   vector<string> argTypes;
   // the number of arrays
   int arrNum = 0;
+  // method scope
+  string methScope = "";
   int blockCount = 0;
   bool mainfunc = false;
   vector<int> bCount;  // maintains current block
