@@ -1,0 +1,7 @@
+class A {
+  int f;
+  int foo(){
+    foo();
+    bar();
+  }
+}

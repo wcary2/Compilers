@@ -7,9 +7,17 @@ class A {
 
 class B {
   A test;
-  int b; 
+  int [][] b; 
+  
+  A foo(int r) {
+    int r;
+  }
   int foo(){
     test = new A();
+    b = new int [2][];
+    b = new int [2][2];
+
   }
+
 }
 

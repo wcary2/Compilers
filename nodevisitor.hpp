@@ -122,7 +122,7 @@ class SymbolTableBuilder : protected NodeVisitor {
   // list of the enclosing blocks to check:
   vector<string> enclosingBlocks;
   // the current symbol returned from name
-  vector<Node *> errorStats;
+  vector<tuple<Node *, string>> errorStats;
   // boolean value returned for binary expression
   bool isBool;
   // the types in the arg list 

@@ -451,7 +451,7 @@ int SymbolTableBuilder::visit(AssignStatement & node){
 	string rightType = "";
 	int r = node.name->accept(*this);
 	if(r == -4){
-		errorStats.push_back(&node);
+		errorStats.push_back(make_tuple(&node, assemName));
 		return -1;
 	}
 	if(r < 0){
@@ -488,6 +488,28 @@ int SymbolTableBuilder::visit(AssignStatement & node){
 }
 
 int SymbolTableBuilder::visit(FuncCallStatement & node){
+	assemName = "";
+	int r = node.name->accept(*this);
+	if(r < 0){
+		if(r == -4){
+			cout << "Error: Could not find method " << assemName << endl;
+			errorStats.push_back(make_tuple(&node,assemName));
+			return r;
+		}
+		return r;
+	}
+	string funcName = assemName + "#";
+	if(node.argChild->size() != 0){
+		node.argChild->accept(*this);
+		funcName += assemName;
+	}
+	funcName += "#";
+	Symbol sym = symt.lookup(funcName);
+	if(sym.notFound){
+		cout << "Error: function not found " << funcName << endl;
+		errorStats.push_back(make_tuple(&node, funcName));
+		return -4;
+	}
 	return 0;
 }
 
@@ -506,6 +528,16 @@ int SymbolTableBuilder::visit(PrintStatement & node){
 }
 
 int SymbolTableBuilder::visit(WhileStatement & node){
+	assemName = "";
+	int r = node.exp->accept(*this);
+	if(r < 0){
+		return r;
+	}
+	if(rType.compare("int") != 0) {
+		cerr << "Error: While statement expression must be an int" 
+		<< " at " << currentScope << endl;
+	}
+	node.stat->accept(*this);
 	return 0;
 }
 
@@ -520,6 +552,17 @@ int SymbolTableBuilder::visit(BlockStatement & node){
 }
 
 int SymbolTableBuilder::visit(IfStatement & node){
+	assemName = "";
+	int r = node.exp->accept(*this);
+	if(r < 0){
+		return r;
+	}
+	if(rType.compare("int") != 0){
+		cerr << "Error: if statement must have expression that resolves to an int"
+			<< " at " << currentScope << endl;
+		return -1;
+	}
+	node.stat->accept(*this);
 	return 0;
 }
 
@@ -576,6 +619,7 @@ int SymbolTableBuilder::visit(Name & node){
 					return 0;
 				}
 				if(symt.lookup("@" + sym.type).notFound){
+					assemName = classScope + "@" + node.getIdent();
 					return -4;
 				}
 				if(sym.notFound){
@@ -709,13 +753,7 @@ int SymbolTableBuilder::visit(Nexp & node){
 	if(node.st != 0){
 		// get simple type as rType 
 		// this means array
-		
-		// check that there is only one sq without exp
-		if((node.expList->size() - node.sqList->size()) > 1){
-			cerr << "Error: There can only be one empty left most square bracket"
-				<< endl;
-				return -1;
-		}
+		rType = node.st->getIdent();
 		// check that the type exists
 		Symbol sym = symt.lookup("@" + rType);
 		if(sym.notFound){
@@ -729,7 +767,7 @@ int SymbolTableBuilder::visit(Nexp & node){
 			return r;
 		}
 		arrNum = node.expList->size() + node.sqList->size();
-		rType = node.st->getIdent();
+		rType = node.st->getIdent() + "%" + to_string(arrNum);
 	} else {
 		// this means not array
 		// else it is in the Nexp node
