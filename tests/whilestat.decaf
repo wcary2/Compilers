@@ -9,8 +9,13 @@ class A {
   int foo() {
     while(2){
       foo();
-      if(b){
+      if(1){
         return;
+      }
+      else {
+        if(b){
+          foo();
+        }
       }
     }
   }

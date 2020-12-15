@@ -542,6 +542,7 @@ int SymbolTableBuilder::visit(WhileStatement & node){
 }
 
 int SymbolTableBuilder::visit(ReturnStatement & node){
+	//TODO 
 	return 0;
 }
 
@@ -567,6 +568,18 @@ int SymbolTableBuilder::visit(IfStatement & node){
 }
 
 int SymbolTableBuilder::visit(IfElseStat & node){
+	assemName = "";
+	int r = node.exp->accept(*this);
+	if(r < 0){
+		return r;
+	}
+	if(rType.compare("int") != 0){
+		cerr << "Error: if statement must have expression that resolves to an int"
+			<< " at " << currentScope << endl;
+			return -1;
+	}
+	node.stat->accept(*this);
+	node.elstat->accept(*this);
 	return 0;
 }
 /*
