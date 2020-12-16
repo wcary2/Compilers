@@ -1,31 +1,11 @@
 /*
 * William Cary
-* dispatcher.cpp
-* Program 5, Compilers
+* nodevisitor.cpp
+* Program 6, Compilers
 * Nov 25, 2020
 * Contains all different nodes
 */
 
-/*
- Multiple Symbol tables pros:
-  Easy to navigate through each one just get the next pointer, and do it recursively.
-  Easy namespace system:
-  Can still mangle parameters into the the name of the symbol allowing for overloading.
-  Wouldn't be too difficult to manage enclosing/class, global and current scope inside
-  of the symbolTable Builder.
- Cons:
-  have to work with pointers, which will probably suck since you will have to store them in a vector
-  this will result in some complications with determining if you are at the right node of the symbol table tree
-  could be solved by storing additional information inside Symbol object, but that's just wasted space in memory 
-  and clutters design.
- One symbol table with mangled names pros:
-  Wouldn't be too difficult to mangle names.
-  Easy namespace system just prepend type information to names until you arrive at the correct name
-  Wouldn't require any pointers, wouldn't require function to iterate through tree just creating strings
-  Making some of the 
-
-
- */
 
 #include <string>
 #include <vector>
@@ -69,16 +49,16 @@ void SymbolTableBuilder::print(){
 				tabs += "  ";
 		}
 		if(sym.order.compare("class") == 0) {
-				cout << tabs << sym.value << " class_type " << endl;
+				cout << tabs << sym.value << "  class_type " << endl;
 		}
 		if(sym.order.compare("constr") == 0) {
-			cout << tabs << sym.value << " method_type " << " void <- ";
+			cout << tabs << sym.value << "  constr_type " << " <- ";
 			if(sym.params.size() == 0) cout << "void ";
 			else for(string param : sym.params) cout << param << " , ";
 			cout << endl; 
 		}
 		if(sym.order.compare("method") == 0){
-			cout << tabs << sym.value << " method_type " << sym.rType << " <- ";
+			cout << tabs << sym.value << "  method_type " << sym.rType << " <- ";
 			if(sym.params.size() == 0) cout << "void ";
 			else for(string param : sym.params) cout << param <<  " , "; 
 
@@ -91,6 +71,9 @@ void SymbolTableBuilder::print(){
 }
 
 int SymbolTableBuilder::checkErrors(){
+	if(mainfunc == false){
+		cerr << "Error: No main function created " << endl; 
+	}
 	for(tuple<string, string> error : errors){
 		// <type, name>
 		Symbol errSym = symt.lookup("@" + get<0>(error));
@@ -103,6 +86,7 @@ int SymbolTableBuilder::checkErrors(){
 			symt.modFoundStatus(get<1>(error));
 		}
 	}
+	checkMissing();
 	return 0;
 }
 
@@ -451,18 +435,30 @@ int SymbolTableBuilder::visit(AssignStatement & node){
 	assemName = "";
 	string rightType = "";
 	int r = node.name->accept(*this);
-	if(r == -4){
+	/*if(r == -4){
 		errorStats.push_back(make_tuple(&node, assemName));
+		return -1;
+	}*/
+	Symbol leftSym = symt.lookup(assemName);
+	if(leftSym.notFound){
+		errorStats.push_back(make_tuple(&node, assemName, classScope, enclosingBlocks));
 		return -1;
 	}
 	if(r < 0){
 		printNameError(r);
 		return -1;
 	}
-	Symbol leftSym = symt.lookup(assemName);
 	string leftType = leftSym.type;
 	assemName = "";
 	r = node.exp->accept(*this);
+	if(r == -4){
+		if(checking){
+			cerr << "Error in Assign statement (Potentially could not find variable) in class " 
+				<< classScope << endl;
+		}
+		errorStats.push_back(make_tuple(&node, assemName, classScope, enclosingBlocks));
+		return r;
+	}
 	if(arrNum > 0){
 		if(leftSym.arrSize.size() != arrNum){
 			cerr << "Error: the variable " << leftSym.value << " does not have the "
@@ -493,23 +489,39 @@ int SymbolTableBuilder::visit(FuncCallStatement & node){
 	int r = node.name->accept(*this);
 	if(r < 0){
 		if(r == -4){
-			cout << "Error: Could not find method " << assemName << endl;
-			errorStats.push_back(make_tuple(&node,assemName));
+			if(checking){
+				cerr << "Error: could not find variable in function call statement in " << classScope << endl; 
+			}
+			errorStats.push_back(make_tuple(&node,assemName, classScope, enclosingBlocks));
 			return r;
+		}
+		if(checking){
+			cerr << "Error: could not find variable in function call statement in " << classScope << endl; 
 		}
 		return r;
 	}
 	string funcName = assemName + "#";
 	if(node.argChild->size() != 0){
-		node.argChild->accept(*this);
+		r = node.argChild->accept(*this);
+		if(r == -4){
+			if(checking){
+				cerr << "Error: could not find variable in function call statement in " << classScope << endl; 
+				return r;
+			}
+			
+			errorStats.push_back(make_tuple(&node, "@int", classScope, enclosingBlocks));
+			return -4;
+		}
+		if(r < 0){
+			cerr << "Error: could not find variable in function call statement in " << classScope << endl; 
+		}
 		funcName += assemName;
 	}
 	funcName += "#";
 	Symbol sym = symt.lookup(funcName);
 	if(sym.notFound){
-		cout << "Error: function not found " << funcName << endl;
-		errorStats.push_back(make_tuple(&node, funcName));
-		return -4;
+		cout << "Error: Function could not be found " << funcName << endl;
+		return -1;
 	}
 	return 0;
 }
@@ -532,18 +544,26 @@ int SymbolTableBuilder::visit(WhileStatement & node){
 	assemName = "";
 	int r = node.exp->accept(*this);
 	if(r < 0){
+		if(r == -4){
+			if(checking){
+				cerr << "Error: In while statement in class " << classScope << " (possibly could not find variable)" << endl;
+			}
+			return r;
+		}
+		cerr << "Error: In while statement in class " << classScope << endl;
 		return r;
 	}
 	if(rType.compare("int") != 0) {
 		cerr << "Error: While statement expression must be an int" 
-		<< " at " << currentScope << endl;
+		<< " at ";
+		for(string s : enclosingBlocks) cerr << s;
+		cerr << currentScope << endl;
 	}
 	node.stat->accept(*this);
 	return 0;
 }
 
 int SymbolTableBuilder::visit(ReturnStatement & node){
-	//TODO 
 	Symbol method = symt.lookup(methScope);
 	assemName = "";
 	if(node.exp != 0){
@@ -568,6 +588,13 @@ int SymbolTableBuilder::visit(IfStatement & node){
 	assemName = "";
 	int r = node.exp->accept(*this);
 	if(r < 0){
+		if(r == -4){
+			if(checking){
+				cerr << "Error: In if statement cannot find variable in if statement in class " << classScope << endl;
+				return r;
+			}
+			errorStats.push_back(make_tuple(&node, "@int", classScope, enclosingBlocks));
+		}
 		return r;
 	}
 	if(rType.compare("int") != 0){
@@ -583,6 +610,13 @@ int SymbolTableBuilder::visit(IfElseStat & node){
 	assemName = "";
 	int r = node.exp->accept(*this);
 	if(r < 0){
+		if(r == -4){
+			if(checking){
+				cerr << "Error: In if statement cannot find variable in if statement " << classScope << endl;
+				return r;
+			}
+			errorStats.push_back(make_tuple(&node, "@int", classScope, enclosingBlocks));
+		}
 		return r;
 	}
 	if(rType.compare("int") != 0){
@@ -638,17 +672,18 @@ int SymbolTableBuilder::visit(Name & node){
 					}
 				}
 				//check if its a constructor
-				Symbol sym = symt.lookup("@" + node.getIdent());
+				Symbol sym = symt.lookup(classScope + "@" + node.getIdent());
 				if(!sym.notFound){
 					assemName = "@" + node.getIdent() + "@" + node.getIdent();
 					return 0;
 				}
 				if(symt.lookup("@" + sym.type).notFound){
-					assemName = classScope + "@" + node.getIdent();
+					assemName = "@" + sym.type;
 					return -4;
 				}
 				if(sym.notFound){
 					assemName = classScope + "@" + node.getIdent();
+					cerr << "Error: Could not find variable " << node.getIdent(); 
 					return -1;
 				}
 				assemName = classScope + "@" + node.getIdent();
@@ -667,6 +702,7 @@ int SymbolTableBuilder::visit(Name & node){
 					}
 				}
 				assemName = tmpScope + "@" + node.getIdent();
+				cerr << "Error: Could not find variable " << tmpScope + "@" + node.getIdent();
 				return -1;
 			}
 			assemName = tmpScope + "@" + node.getIdent();
@@ -693,6 +729,7 @@ int SymbolTableBuilder::visit(Name & node){
  * 
 */
 int SymbolTableBuilder::visit(Expression & node){
+	int r = 0;
 	if(node.isNul){
 		rType = "null";
 	}
@@ -701,23 +738,25 @@ int SymbolTableBuilder::visit(Expression & node){
 	}
 	else {
 		assemName = "";
-		node.name->accept(*this);
+		r = node.name->accept(*this);
 		Symbol sym = symt.lookup(assemName);
 		rType = sym.rType;
 	}
-	return 0;
+	return r;
 }
 
 int SymbolTableBuilder::visit(ArgList & node){
 	argTypes.empty();
 	string args = "";
+	int ret = 0;
 	for(int i = 0; i < node.size(); i++){
-		node.at(i)->accept(*this);
+		int r = node.at(i)->accept(*this);
+		if(ret != -4) ret = r;
 		args += rType + "&";
 		argTypes.push_back(rType);
 	}
 	assemName = args;
-	return 0;
+	return ret;
 }
 
 /*
@@ -765,8 +804,8 @@ int SymbolTableBuilder::visit(ReadExp & node){
 
 int SymbolTableBuilder::visit(NewExp & node){
 	assemName = "";
-	node.nexp->accept(*this);
-	return 0;
+	int r = node.nexp->accept(*this);
+	return r;
 }
 /*
  * returns 0 when successful
@@ -804,7 +843,9 @@ int SymbolTableBuilder::visit(Nexp & node){
 		}
 		constrName += "#";
 		// Find in symbol table
+		rType = node.getIdent();
 		Symbol sym = symt.lookup(constrName);
+		assemName = constrName;
 		if(sym.notFound){
 			//TODO make this check at the end again
 			cerr << "Could not find constructor " << constrName << endl;
@@ -846,12 +887,12 @@ int SymbolTableBuilder::visit(BinaryExp & node){
 	assemName = "";
 	int r = node.left->accept(*this);
 	if(r < 0){
-		return -5; 
+		return r; 
 	}
 	string leftType = rType;
 	r = node.left->accept(*this);
 	if(r < 0) {
-		return -5;
+		return r;
 	}
 	r = node.right->accept(*this);
 	string rightType = rType;
@@ -913,5 +954,19 @@ void SymbolTableBuilder::printNameError(int r){
 	}
 	if(r == 1) {
 		cerr << "Method on the left side of a function" << endl; 
+	}
+}
+
+void SymbolTableBuilder::checkMissing(){
+	checking = true;
+	for(tuple<Node *, string, string, vector<string>> val : errorStats){
+		if(!symt.lookup(get<1>(val)).notFound){
+			classScope = get<2>(val);
+			enclosingBlocks = get<3>(val);
+			get<0>(val)->accept(*this);
+		}
+		else {
+			cerr << "Error: No Symbol was declared for return value of " << get<1>(val) << endl;
+		}
 	}
 }

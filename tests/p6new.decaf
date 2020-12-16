@@ -1,6 +1,6 @@
 class A {
   int a;
-  A() {
+  A(int f1, int f2) {
     a = 2;
   }
 }
@@ -10,13 +10,16 @@ class B {
   int [][] b; 
   
   A foo(int r) {
-    int r;
+    int f;
   }
   int foo(){
-    test = new A();
+    test = new A(1, 2);
     b = new int [2][];
     b = new int [2][2];
 
+  }
+  int main(int f){
+    return test;
   }
 
 }

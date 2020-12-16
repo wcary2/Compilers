@@ -1,8 +1,8 @@
 /*
 * William Cary
 * symbol.hpp
-* Program 4, Compilers
-* Nov 25, 2020
+* Program 6, Compilers
+* Dec 14, 2020
 * Contains all different nodes
 */
 #ifndef _SYMBOL_HPP_

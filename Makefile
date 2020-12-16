@@ -26,25 +26,25 @@ LFLAGS=--warn
 
 .PHONY: clean tarball
 
-all: tester program5.tab.cpp program5_lex.cpp
+all: tester program6.tab.cpp program6_lex.cpp
 
 
-tester: program5.tab.cpp program5.tab.hpp program5_lex.cpp program5.cpp nodevisitor.cpp symbol.cpp symboltable.cpp Node.hpp 
-	$(CXX) $(CXXFLAGS) program5.cpp program5.tab.cpp program5_lex.cpp Node.cpp \
-		nodevisitor.cpp symboltable.cpp symbol.cpp -o program5
+tester: program6.tab.cpp program6.tab.hpp program6_lex.cpp program6.cpp nodevisitor.cpp symbol.cpp symboltable.cpp Node.hpp 
+	$(CXX) $(CXXFLAGS) program6.cpp program6.tab.cpp program6_lex.cpp Node.cpp \
+		nodevisitor.cpp symboltable.cpp symbol.cpp -o program6
 
-program5.tab.cpp : program5.ypp Node.hpp
-	$(YACC) $(YFLAGS) program5.ypp
+program6.tab.cpp : program6.ypp Node.hpp
+	$(YACC) $(YFLAGS) program6.ypp
 
-parserTesting: program5.ypp Node.hpp
-	$(YACC) $(YFLAGSTESTING) program5.ypp
+parserTesting: program6.ypp Node.hpp
+	$(YACC) $(YFLAGSTESTING) program6.ypp
 
-program5_lex.cpp: program5.lpp Node.hpp
-	$(LEXXX) $(LFLAGS) program5.lpp
+program6_lex.cpp: program6.lpp Node.hpp
+	$(LEXXX) $(LFLAGS) program6.lpp
 
 tidy:
-	/bin/rm -f a.out core.* program5.tab.* program5.output \
-	  program5_lex.cpp
+	/bin/rm -f a.out core.* program6.tab.* program6.output \
+	  program6_lex.cpp
 
 # the tidy rule cleans up but leaves the executable. The clean, uses tidy
 # then it removes the executable.
@@ -52,6 +52,6 @@ clean: tidy
 	/bin/rm -f tester
 
 tarball:
-	tar cf program5.tar Makefile Node.hpp Node.cpp program5.lpp program5.ypp\
-	  program5.cpp nodevisitor.cpp nodevisitor.hpp symbol.cpp symbol.hpp \
+	tar cf program6.tar Makefile Node.hpp Node.cpp program6.lpp program6.ypp\
+	  program6.cpp nodevisitor.cpp nodevisitor.hpp symbol.cpp symbol.hpp \
 		symboltable.hpp symboltable.cpp

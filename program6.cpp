@@ -1,12 +1,17 @@
-// program4.cpp
-// William Cary
+/*
+* William Cary
+* Program6.hpp
+* Program 6, Compilers
+* Dec 14, 2020
+* Contains all different nodes
+*/
 
 #include <iostream>
 #include <string>
 #include <FlexLexer.h>
 #include "Node.hpp"
 #include "nodevisitor.hpp"
-#include "program5.tab.hpp"
+#include "program6.tab.hpp"
 #include <vector>
 #include <stdlib.h>
 

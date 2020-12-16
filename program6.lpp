@@ -1,7 +1,7 @@
 /* Program3.lpp
  * William Cary
- * Program 3, Compilers
- * October 18, 2020
+ * Program 6, Compilers
+ * Dec 14, 2020
  * FlexLexer (flex scanner)
 */
 
@@ -11,7 +11,7 @@
   #include <string>
   #include <vector>
   #include "Node.hpp"
-  #include "program5.tab.hpp"
+  #include "program6.tab.hpp"
 
   using std::vector;
   using std::string;
@@ -21,7 +21,7 @@
 
 %}
 
-%option outfile="program5_lex.cpp"
+%option outfile="program6_lex.cpp"
 %option noyywrap
 %option yylineno
 

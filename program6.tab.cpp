@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 9 "program5.ypp"
+#line 9 "program6.ypp"
 
   #include <iostream>
   #include <string>
@@ -88,7 +88,7 @@
   void yyerror(const char*);
 
 
-#line 92 "program5.tab.cpp"
+#line 92 "program6.tab.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -111,7 +111,7 @@
 #  endif
 # endif
 
-#include "program5.tab.hpp"
+#include "program6.tab.hpp"
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -1360,815 +1360,815 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: program classdec  */
-#line 52 "program5.ypp"
+#line 52 "program6.ypp"
                    {
     tree.push_back((yyvsp[0].nt));
   }
-#line 1368 "program5.tab.cpp"
+#line 1368 "program6.tab.cpp"
     break;
 
   case 3: /* program: classdec  */
-#line 55 "program5.ypp"
+#line 55 "program6.ypp"
              {
     tree.push_back((yyvsp[0].nt));
   }
-#line 1376 "program5.tab.cpp"
+#line 1376 "program6.tab.cpp"
     break;
 
   case 4: /* classdec: CLASS ID classbody  */
-#line 61 "program5.ypp"
+#line 61 "program6.ypp"
                      {
     (yyval.nt) = new ClassDec((yyvsp[-1].nt)->getIdent(), (yyvsp[0].nt));
   }
-#line 1384 "program5.tab.cpp"
+#line 1384 "program6.tab.cpp"
     break;
 
   case 5: /* classbody: LBRACK var_declarations constructors method_declarations RBRACK  */
-#line 67 "program5.ypp"
+#line 67 "program6.ypp"
                                                                   {
       (yyval.nt) = new ClassBody((yyvsp[-3].nt), (yyvsp[-2].nt), (yyvsp[-1].nt));
     }
-#line 1392 "program5.tab.cpp"
+#line 1392 "program6.tab.cpp"
     break;
 
   case 6: /* classbody: LBRACK var_declarations constructors RBRACK  */
-#line 70 "program5.ypp"
+#line 70 "program6.ypp"
                                                 {
       (yyval.nt) = new ClassBody((yyvsp[-2].nt), (yyvsp[-1].nt), new NodeList());
   }
-#line 1400 "program5.tab.cpp"
+#line 1400 "program6.tab.cpp"
     break;
 
   case 7: /* classbody: LBRACK var_declarations method_declarations RBRACK  */
-#line 73 "program5.ypp"
+#line 73 "program6.ypp"
                                                        {
       (yyval.nt) = new ClassBody((yyvsp[-2].nt), new NodeList(), (yyvsp[-1].nt));
   }
-#line 1408 "program5.tab.cpp"
+#line 1408 "program6.tab.cpp"
     break;
 
   case 8: /* classbody: LBRACK constructors method_declarations RBRACK  */
-#line 76 "program5.ypp"
+#line 76 "program6.ypp"
                                                    {
       (yyval.nt) = new ClassBody(new NodeList(), (yyvsp[-2].nt), (yyvsp[-1].nt));
   }
-#line 1416 "program5.tab.cpp"
+#line 1416 "program6.tab.cpp"
     break;
 
   case 9: /* classbody: LBRACK var_declarations RBRACK  */
-#line 79 "program5.ypp"
+#line 79 "program6.ypp"
                                    {
       (yyval.nt) = new ClassBody((yyvsp[-1].nt), new NodeList(), new NodeList());
   }
-#line 1424 "program5.tab.cpp"
+#line 1424 "program6.tab.cpp"
     break;
 
   case 10: /* classbody: LBRACK constructors RBRACK  */
-#line 82 "program5.ypp"
+#line 82 "program6.ypp"
                                {
       (yyval.nt) = new ClassBody(new NodeList(), (yyvsp[-1].nt), new NodeList());
   }
-#line 1432 "program5.tab.cpp"
+#line 1432 "program6.tab.cpp"
     break;
 
   case 11: /* classbody: LBRACK method_declarations RBRACK  */
-#line 85 "program5.ypp"
+#line 85 "program6.ypp"
                                       {
       (yyval.nt) = new ClassBody(new NodeList(), new NodeList(), (yyvsp[-1].nt));
   }
-#line 1440 "program5.tab.cpp"
+#line 1440 "program6.tab.cpp"
     break;
 
   case 12: /* classbody: LBRACK RBRACK  */
-#line 88 "program5.ypp"
+#line 88 "program6.ypp"
                   {
       (yyval.nt) = new ClassBody(new NodeList(), new NodeList(), new NodeList());
   }
-#line 1448 "program5.tab.cpp"
+#line 1448 "program6.tab.cpp"
     break;
 
   case 13: /* var_declarations: type ID SEMI  */
-#line 95 "program5.ypp"
+#line 95 "program6.ypp"
   {
     (yyval.nt) = new NodeList();
     (yyval.nt)->push_back(new VarDec((yyvsp[-2].nt), (yyvsp[-1].nt)->getIdent()));
   }
-#line 1457 "program5.tab.cpp"
+#line 1457 "program6.tab.cpp"
     break;
 
   case 14: /* var_declarations: var_declarations type ID SEMI  */
-#line 99 "program5.ypp"
+#line 99 "program6.ypp"
                                   {
       (yyvsp[-3].nt)->push_back(new VarDec((yyvsp[-2].nt), (yyvsp[-1].nt)->getIdent()));
       (yyval.nt) = (yyvsp[-3].nt);
   }
-#line 1466 "program5.tab.cpp"
+#line 1466 "program6.tab.cpp"
     break;
 
   case 15: /* var_declarations: error SEMI  */
-#line 103 "program5.ypp"
+#line 103 "program6.ypp"
                  { yyerror("Missing semicolon"); yyerrok;}
-#line 1472 "program5.tab.cpp"
+#line 1472 "program6.tab.cpp"
     break;
 
   case 16: /* var_declarations: error RBRACK  */
-#line 104 "program5.ypp"
+#line 104 "program6.ypp"
                  { yyerror("Missing semicolon"); yyerrok;}
-#line 1478 "program5.tab.cpp"
+#line 1478 "program6.tab.cpp"
     break;
 
   case 17: /* constructors: construct  */
-#line 109 "program5.ypp"
+#line 109 "program6.ypp"
   {
     (yyval.nt) = new NodeList();
     (yyval.nt)->push_back((yyvsp[0].nt));
   }
-#line 1487 "program5.tab.cpp"
+#line 1487 "program6.tab.cpp"
     break;
 
   case 18: /* constructors: constructors construct  */
-#line 113 "program5.ypp"
+#line 113 "program6.ypp"
                            {
     (yyvsp[-1].nt)->push_back((yyvsp[0].nt));
     (yyval.nt) = (yyvsp[-1].nt);
   }
-#line 1496 "program5.tab.cpp"
+#line 1496 "program6.tab.cpp"
     break;
 
   case 19: /* construct: ID LPARAM RPARAM block  */
-#line 120 "program5.ypp"
+#line 120 "program6.ypp"
                          {
       (yyval.nt) = new ConstrDec((yyvsp[-3].nt)->getIdent(), new ParamList(), (yyvsp[0].nt)); 
   }
-#line 1504 "program5.tab.cpp"
+#line 1504 "program6.tab.cpp"
     break;
 
   case 20: /* construct: ID LPARAM parameterlist RPARAM block  */
-#line 123 "program5.ypp"
+#line 123 "program6.ypp"
                                          {
       (yyval.nt) = new ConstrDec((yyvsp[-4].nt)->getIdent(), (yyvsp[-2].nt), (yyvsp[0].nt));
   }
-#line 1512 "program5.tab.cpp"
+#line 1512 "program6.tab.cpp"
     break;
 
   case 21: /* construct: error block  */
-#line 126 "program5.ypp"
+#line 126 "program6.ypp"
                 { yyerror("Syntax constructor error"); yyerrok;}
-#line 1518 "program5.tab.cpp"
+#line 1518 "program6.tab.cpp"
     break;
 
   case 22: /* method_declarations: method_declaration  */
-#line 131 "program5.ypp"
+#line 131 "program6.ypp"
   {
     (yyval.nt) = new NodeList();
     (yyval.nt)->push_back((yyvsp[0].nt));
   }
-#line 1527 "program5.tab.cpp"
+#line 1527 "program6.tab.cpp"
     break;
 
   case 23: /* method_declarations: method_declarations method_declaration  */
-#line 135 "program5.ypp"
+#line 135 "program6.ypp"
                                            {
     (yyvsp[-1].nt)->push_back((yyvsp[0].nt));
     (yyval.nt) = (yyvsp[-1].nt);
   }
-#line 1536 "program5.tab.cpp"
+#line 1536 "program6.tab.cpp"
     break;
 
   case 24: /* method_declaration: type ID LPARAM RPARAM block  */
-#line 142 "program5.ypp"
+#line 142 "program6.ypp"
                               {
       (yyval.nt) = new MethodDec(new ResultType((yyvsp[-4].nt)), (yyvsp[-3].nt)->getIdent(), new ParamList(), (yyvsp[0].nt));
   }
-#line 1544 "program5.tab.cpp"
+#line 1544 "program6.tab.cpp"
     break;
 
   case 25: /* method_declaration: VOID ID LPARAM RPARAM block  */
-#line 145 "program5.ypp"
+#line 145 "program6.ypp"
                                 {
       (yyval.nt) = new MethodDec(new ResultType(), (yyvsp[-3].nt)->getIdent(), new ParamList(), (yyvsp[0].nt));
   }
-#line 1552 "program5.tab.cpp"
+#line 1552 "program6.tab.cpp"
     break;
 
   case 26: /* method_declaration: type ID LPARAM parameterlist RPARAM block  */
-#line 148 "program5.ypp"
+#line 148 "program6.ypp"
                                              {
       (yyval.nt) = new MethodDec(new ResultType((yyvsp[-5].nt)), (yyvsp[-4].nt)->getIdent(), (yyvsp[-2].nt), (yyvsp[0].nt));
   }
-#line 1560 "program5.tab.cpp"
+#line 1560 "program6.tab.cpp"
     break;
 
   case 27: /* method_declaration: VOID ID LPARAM parameterlist RPARAM block  */
-#line 151 "program5.ypp"
+#line 151 "program6.ypp"
                                               {
       (yyval.nt) = new MethodDec(new ResultType(), (yyvsp[-4].nt)->getIdent(), (yyvsp[-2].nt), (yyvsp[0].nt));
   }
-#line 1568 "program5.tab.cpp"
+#line 1568 "program6.tab.cpp"
     break;
 
   case 28: /* method_declaration: type error block  */
-#line 154 "program5.ypp"
+#line 154 "program6.ypp"
                      { yyerror("Missing semicolon"); yyerrok;}
-#line 1574 "program5.tab.cpp"
+#line 1574 "program6.tab.cpp"
     break;
 
   case 29: /* method_declaration: VOID error block  */
-#line 155 "program5.ypp"
+#line 155 "program6.ypp"
                      { yyerror("Missing semicolon"); yyerrok;}
-#line 1580 "program5.tab.cpp"
+#line 1580 "program6.tab.cpp"
     break;
 
   case 30: /* parameterlist: parameter  */
-#line 158 "program5.ypp"
+#line 158 "program6.ypp"
             {
     (yyval.nt) = new ParamList();
     (yyval.nt)->push_back((yyvsp[0].nt));
   }
-#line 1589 "program5.tab.cpp"
+#line 1589 "program6.tab.cpp"
     break;
 
   case 31: /* parameterlist: parameterlist COMMA parameter  */
-#line 162 "program5.ypp"
+#line 162 "program6.ypp"
                                    {
     (yyvsp[-2].nt)->push_back((yyvsp[0].nt));
     (yyval.nt) = (yyvsp[-2].nt);
   }
-#line 1598 "program5.tab.cpp"
+#line 1598 "program6.tab.cpp"
     break;
 
   case 32: /* parameterlist: parameterlist error COMMA parameter  */
-#line 166 "program5.ypp"
+#line 166 "program6.ypp"
                                         {yyerror("Possibly missing comma");yyerrok;}
-#line 1604 "program5.tab.cpp"
+#line 1604 "program6.tab.cpp"
     break;
 
   case 33: /* parameter: type ID  */
-#line 170 "program5.ypp"
+#line 170 "program6.ypp"
           {
     (yyval.nt) = new Parameter((yyvsp[-1].nt), (yyvsp[0].nt)->getIdent());
   }
-#line 1612 "program5.tab.cpp"
+#line 1612 "program6.tab.cpp"
     break;
 
   case 34: /* block: LBRACK localvardecs statements RBRACK  */
-#line 177 "program5.ypp"
+#line 177 "program6.ypp"
                                         {
     (yyval.nt) = new Block((yyvsp[-2].nt), (yyvsp[-1].nt));
   }
-#line 1620 "program5.tab.cpp"
+#line 1620 "program6.tab.cpp"
     break;
 
   case 35: /* block: LBRACK localvardecs RBRACK  */
-#line 180 "program5.ypp"
+#line 180 "program6.ypp"
                                {
     (yyval.nt) = new Block((yyvsp[-1].nt), new NodeList());
   }
-#line 1628 "program5.tab.cpp"
+#line 1628 "program6.tab.cpp"
     break;
 
   case 36: /* block: LBRACK statements RBRACK  */
-#line 183 "program5.ypp"
+#line 183 "program6.ypp"
                              {
     (yyval.nt) = new Block(new NodeList(), (yyvsp[-1].nt));
   }
-#line 1636 "program5.tab.cpp"
+#line 1636 "program6.tab.cpp"
     break;
 
   case 37: /* block: LBRACK RBRACK  */
-#line 186 "program5.ypp"
+#line 186 "program6.ypp"
                   {
     (yyval.nt) = new Block(new NodeList(), new NodeList());
   }
-#line 1644 "program5.tab.cpp"
+#line 1644 "program6.tab.cpp"
     break;
 
   case 38: /* localvardecs: localvardec  */
-#line 192 "program5.ypp"
+#line 192 "program6.ypp"
              {
     (yyval.nt) = new  NodeList();
     (yyval.nt)->push_back((yyvsp[0].nt));
   }
-#line 1653 "program5.tab.cpp"
+#line 1653 "program6.tab.cpp"
     break;
 
   case 39: /* localvardecs: localvardecs localvardec  */
-#line 196 "program5.ypp"
+#line 196 "program6.ypp"
                              {
     (yyvsp[-1].nt)->push_back((yyvsp[0].nt));
   }
-#line 1661 "program5.tab.cpp"
+#line 1661 "program6.tab.cpp"
     break;
 
   case 40: /* localvardec: type ID SEMI  */
-#line 203 "program5.ypp"
+#line 203 "program6.ypp"
                {
     (yyval.nt) = new LocalVarDec((yyvsp[-2].nt), (yyvsp[-1].nt)->getIdent());
   }
-#line 1669 "program5.tab.cpp"
+#line 1669 "program6.tab.cpp"
     break;
 
   case 41: /* localvardec: error SEMI  */
-#line 206 "program5.ypp"
+#line 206 "program6.ypp"
                  { yyerror("Missing semicolon"); yyerrok;}
-#line 1675 "program5.tab.cpp"
+#line 1675 "program6.tab.cpp"
     break;
 
   case 42: /* localvardec: error RBRACK  */
-#line 207 "program5.ypp"
+#line 207 "program6.ypp"
                  { yyerror("Missing semicolon"); yyerrok;}
-#line 1681 "program5.tab.cpp"
+#line 1681 "program6.tab.cpp"
     break;
 
   case 43: /* statements: statement  */
-#line 211 "program5.ypp"
+#line 211 "program6.ypp"
             {
     (yyval.nt) = new NodeList();
     (yyval.nt)->push_back((yyvsp[0].nt));
   }
-#line 1690 "program5.tab.cpp"
+#line 1690 "program6.tab.cpp"
     break;
 
   case 44: /* statements: statements statement  */
-#line 215 "program5.ypp"
+#line 215 "program6.ypp"
                          {
     (yyvsp[-1].nt)->push_back((yyvsp[0].nt));
   }
-#line 1698 "program5.tab.cpp"
+#line 1698 "program6.tab.cpp"
     break;
 
   case 45: /* statement: SEMI  */
-#line 221 "program5.ypp"
+#line 221 "program6.ypp"
        {
       (yyval.nt) = new Statement();
   }
-#line 1706 "program5.tab.cpp"
+#line 1706 "program6.tab.cpp"
     break;
 
   case 46: /* statement: name EQ expression SEMI  */
-#line 224 "program5.ypp"
+#line 224 "program6.ypp"
                             {
     (yyval.nt) = new AssignStatement((yyvsp[-3].nt), (yyvsp[-1].nt));
   }
-#line 1714 "program5.tab.cpp"
+#line 1714 "program6.tab.cpp"
     break;
 
   case 47: /* statement: name LPARAM arglist RPARAM SEMI  */
-#line 227 "program5.ypp"
+#line 227 "program6.ypp"
                                     {
     (yyval.nt) = new FuncCallStatement((yyvsp[-4].nt), (yyvsp[-2].nt));
   }
-#line 1722 "program5.tab.cpp"
+#line 1722 "program6.tab.cpp"
     break;
 
   case 48: /* statement: name LPARAM RPARAM SEMI  */
-#line 230 "program5.ypp"
+#line 230 "program6.ypp"
                             {
     (yyval.nt) = new FuncCallStatement((yyvsp[-3].nt), new ArgList());
   }
-#line 1730 "program5.tab.cpp"
+#line 1730 "program6.tab.cpp"
     break;
 
   case 49: /* statement: PRINT LPARAM arglist RPARAM SEMI  */
-#line 233 "program5.ypp"
+#line 233 "program6.ypp"
                                      {
       (yyval.nt) = new PrintStatement((yyvsp[-2].nt));
   }
-#line 1738 "program5.tab.cpp"
+#line 1738 "program6.tab.cpp"
     break;
 
   case 50: /* statement: PRINT LPARAM RPARAM SEMI  */
-#line 236 "program5.ypp"
+#line 236 "program6.ypp"
                              {
       (yyval.nt) = new PrintStatement(new ArgList());
   }
-#line 1746 "program5.tab.cpp"
+#line 1746 "program6.tab.cpp"
     break;
 
   case 51: /* statement: IF LPARAM expression RPARAM statement  */
-#line 239 "program5.ypp"
+#line 239 "program6.ypp"
                                           {
       (yyval.nt) = new IfStatement((yyvsp[-2].nt), (yyvsp[0].nt));
   }
-#line 1754 "program5.tab.cpp"
+#line 1754 "program6.tab.cpp"
     break;
 
   case 52: /* statement: IF LPARAM expression RPARAM statement ELSE statement  */
-#line 242 "program5.ypp"
+#line 242 "program6.ypp"
                                                          {
       (yyval.nt) = new IfElseStat((yyvsp[-4].nt), (yyvsp[-2].nt), (yyvsp[0].nt));
   }
-#line 1762 "program5.tab.cpp"
+#line 1762 "program6.tab.cpp"
     break;
 
   case 53: /* statement: WHILE LPARAM expression RPARAM statement  */
-#line 245 "program5.ypp"
+#line 245 "program6.ypp"
                                              {
       (yyval.nt) = new WhileStatement((yyvsp[-2].nt), (yyvsp[0].nt));
   }
-#line 1770 "program5.tab.cpp"
+#line 1770 "program6.tab.cpp"
     break;
 
   case 54: /* statement: RET expression SEMI  */
-#line 248 "program5.ypp"
+#line 248 "program6.ypp"
                        {
       (yyval.nt) = new ReturnStatement((yyvsp[-1].nt));
   }
-#line 1778 "program5.tab.cpp"
+#line 1778 "program6.tab.cpp"
     break;
 
   case 55: /* statement: RET SEMI  */
-#line 251 "program5.ypp"
+#line 251 "program6.ypp"
              {
       (yyval.nt) = new ReturnStatement();
   }
-#line 1786 "program5.tab.cpp"
+#line 1786 "program6.tab.cpp"
     break;
 
   case 56: /* statement: block  */
-#line 254 "program5.ypp"
+#line 254 "program6.ypp"
           {
       (yyval.nt) = new BlockStatement((yyvsp[0].nt));
   }
-#line 1794 "program5.tab.cpp"
+#line 1794 "program6.tab.cpp"
     break;
 
   case 57: /* type: simpletype  */
-#line 260 "program5.ypp"
+#line 260 "program6.ypp"
              {
     (yyval.nt) = new Type((yyvsp[0].nt), new NodeList());
   }
-#line 1802 "program5.tab.cpp"
+#line 1802 "program6.tab.cpp"
     break;
 
   case 58: /* type: simpletype multibrackets  */
-#line 263 "program5.ypp"
+#line 263 "program6.ypp"
                              {
     (yyval.nt) = new Type((yyvsp[-1].nt), (yyvsp[0].nt));
   }
-#line 1810 "program5.tab.cpp"
+#line 1810 "program6.tab.cpp"
     break;
 
   case 59: /* multibrackets: OSB CSB  */
-#line 269 "program5.ypp"
+#line 269 "program6.ypp"
           {
     (yyval.nt) = new Multibrackets();
     (yyval.nt)->push_back(new Node());
   }
-#line 1819 "program5.tab.cpp"
+#line 1819 "program6.tab.cpp"
     break;
 
   case 60: /* multibrackets: multibrackets OSB CSB  */
-#line 273 "program5.ypp"
+#line 273 "program6.ypp"
                           {
     (yyvsp[-2].nt)->push_back(new Node());
   }
-#line 1827 "program5.tab.cpp"
+#line 1827 "program6.tab.cpp"
     break;
 
   case 61: /* simpletype: INT  */
-#line 280 "program5.ypp"
+#line 280 "program6.ypp"
       {
     (yyval.nt) = new SimpleType("int");
   }
-#line 1835 "program5.tab.cpp"
+#line 1835 "program6.tab.cpp"
     break;
 
   case 62: /* simpletype: ID  */
-#line 283 "program5.ypp"
+#line 283 "program6.ypp"
        {
     (yyval.nt) = new SimpleType((yyvsp[0].nt)->getIdent());
   }
-#line 1843 "program5.tab.cpp"
+#line 1843 "program6.tab.cpp"
     break;
 
   case 63: /* name: THIS  */
-#line 289 "program5.ypp"
+#line 289 "program6.ypp"
        {
     (yyval.nt) = new Name("this");
   }
-#line 1851 "program5.tab.cpp"
+#line 1851 "program6.tab.cpp"
     break;
 
   case 64: /* name: ID  */
-#line 292 "program5.ypp"
+#line 292 "program6.ypp"
        {
     (yyval.nt) = new Name((yyvsp[0].nt)->getIdent());
   }
-#line 1859 "program5.tab.cpp"
+#line 1859 "program6.tab.cpp"
     break;
 
   case 65: /* name: ID elementAccess  */
-#line 295 "program5.ypp"
+#line 295 "program6.ypp"
                      {
     (yyval.nt) = new Name((yyvsp[0].nt), (yyvsp[-1].nt)->getIdent());
   }
-#line 1867 "program5.tab.cpp"
+#line 1867 "program6.tab.cpp"
     break;
 
   case 66: /* name: THIS DOT nameNoThis  */
-#line 298 "program5.ypp"
+#line 298 "program6.ypp"
                         {
     (yyval.nt) = new Name(new Name("this"),(yyvsp[0].nt));
   }
-#line 1875 "program5.tab.cpp"
+#line 1875 "program6.tab.cpp"
     break;
 
   case 67: /* name: ID DOT name  */
-#line 301 "program5.ypp"
+#line 301 "program6.ypp"
                 {
     (yyval.nt) = new Name((yyvsp[-2].nt)->getIdent(), (yyvsp[0].nt));
   }
-#line 1883 "program5.tab.cpp"
+#line 1883 "program6.tab.cpp"
     break;
 
   case 68: /* name: THIS error SEMI  */
-#line 304 "program5.ypp"
+#line 304 "program6.ypp"
                     {yyerror("possibly missing ."); yyerrok;}
-#line 1889 "program5.tab.cpp"
+#line 1889 "program6.tab.cpp"
     break;
 
   case 69: /* name: ID error SEMI  */
-#line 305 "program5.ypp"
+#line 305 "program6.ypp"
                     {yyerror("possibly missing ."); yyerrok;}
-#line 1895 "program5.tab.cpp"
+#line 1895 "program6.tab.cpp"
     break;
 
   case 70: /* elementAccess: OSB expression CSB  */
-#line 309 "program5.ypp"
+#line 309 "program6.ypp"
                      {
     (yyval.nt) = new NodeList();
     (yyval.nt)->push_back((yyvsp[-1].nt));
   }
-#line 1904 "program5.tab.cpp"
+#line 1904 "program6.tab.cpp"
     break;
 
   case 71: /* elementAccess: elementAccess OSB expression CSB  */
-#line 313 "program5.ypp"
+#line 313 "program6.ypp"
                                      {
     (yyval.nt)->push_back((yyvsp[-1].nt));
   }
-#line 1912 "program5.tab.cpp"
+#line 1912 "program6.tab.cpp"
     break;
 
   case 72: /* nameNoThis: ID  */
-#line 320 "program5.ypp"
+#line 320 "program6.ypp"
      {
     (yyval.nt) = new Name((yyvsp[0].nt)->getIdent());
   }
-#line 1920 "program5.tab.cpp"
+#line 1920 "program6.tab.cpp"
     break;
 
   case 73: /* nameNoThis: nameNoThis DOT ID  */
-#line 323 "program5.ypp"
+#line 323 "program6.ypp"
                      {
     (yyval.nt) = new Name((yyvsp[-2].nt), (yyvsp[0].nt)->getIdent());
   }
-#line 1928 "program5.tab.cpp"
+#line 1928 "program6.tab.cpp"
     break;
 
   case 74: /* arglist: expression  */
-#line 329 "program5.ypp"
+#line 329 "program6.ypp"
             {
     (yyval.nt) = new ArgList();
     (yyval.nt)->push_back((yyvsp[0].nt));
   }
-#line 1937 "program5.tab.cpp"
+#line 1937 "program6.tab.cpp"
     break;
 
   case 75: /* arglist: arglist COMMA expression  */
-#line 333 "program5.ypp"
+#line 333 "program6.ypp"
                             {
     (yyval.nt)->push_back((yyvsp[0].nt));
   }
-#line 1945 "program5.tab.cpp"
+#line 1945 "program6.tab.cpp"
     break;
 
   case 76: /* expression: NUM  */
-#line 339 "program5.ypp"
+#line 339 "program6.ypp"
       {
     (yyval.nt) = new Expression(stoi((yyvsp[0].nt)->getIdent()));
   }
-#line 1953 "program5.tab.cpp"
+#line 1953 "program6.tab.cpp"
     break;
 
   case 77: /* expression: name  */
-#line 342 "program5.ypp"
+#line 342 "program6.ypp"
          {
     (yyval.nt) = new Expression((yyvsp[0].nt));
   }
-#line 1961 "program5.tab.cpp"
+#line 1961 "program6.tab.cpp"
     break;
 
   case 78: /* expression: READ LPARAM RPARAM  */
-#line 345 "program5.ypp"
+#line 345 "program6.ypp"
                        {
       (yyval.nt) = new ReadExp();
   }
-#line 1969 "program5.tab.cpp"
+#line 1969 "program6.tab.cpp"
     break;
 
   case 79: /* expression: NLL  */
-#line 348 "program5.ypp"
+#line 348 "program6.ypp"
         {
       (yyval.nt) = new Expression();
   }
-#line 1977 "program5.tab.cpp"
+#line 1977 "program6.tab.cpp"
     break;
 
   case 80: /* expression: name LPARAM arglist RPARAM  */
-#line 351 "program5.ypp"
+#line 351 "program6.ypp"
                                {
       (yyval.nt) = new FuncExp((yyvsp[-3].nt), (yyvsp[-1].nt), false);
   }
-#line 1985 "program5.tab.cpp"
+#line 1985 "program6.tab.cpp"
     break;
 
   case 81: /* expression: name LPARAM RPARAM  */
-#line 354 "program5.ypp"
+#line 354 "program6.ypp"
                        {
       (yyval.nt) = new FuncExp((yyvsp[-2].nt), new Node(), true);
   }
-#line 1993 "program5.tab.cpp"
+#line 1993 "program6.tab.cpp"
     break;
 
   case 82: /* expression: NEW newexp  */
-#line 357 "program5.ypp"
+#line 357 "program6.ypp"
                {
     (yyval.nt) = new NewExp((yyvsp[0].nt));
   }
-#line 2001 "program5.tab.cpp"
+#line 2001 "program6.tab.cpp"
     break;
 
   case 83: /* expression: unaryop expression  */
-#line 360 "program5.ypp"
+#line 360 "program6.ypp"
                                    {(yyval.nt) = new UnaryExp((yyvsp[-1].nt), (yyvsp[0].nt));}
-#line 2007 "program5.tab.cpp"
+#line 2007 "program6.tab.cpp"
     break;
 
   case 84: /* expression: expression ADD expression  */
-#line 361 "program5.ypp"
+#line 361 "program6.ypp"
                               {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), "+", (yyvsp[0].nt));}
-#line 2013 "program5.tab.cpp"
+#line 2013 "program6.tab.cpp"
     break;
 
   case 85: /* expression: expression SUB expression  */
-#line 362 "program5.ypp"
+#line 362 "program6.ypp"
                               {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), "-", (yyvsp[0].nt));}
-#line 2019 "program5.tab.cpp"
+#line 2019 "program6.tab.cpp"
     break;
 
   case 86: /* expression: expression COND_OR expression  */
-#line 363 "program5.ypp"
+#line 363 "program6.ypp"
                                   {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), "||", (yyvsp[0].nt));}
-#line 2025 "program5.tab.cpp"
+#line 2025 "program6.tab.cpp"
     break;
 
   case 87: /* expression: expression MUL expression  */
-#line 364 "program5.ypp"
+#line 364 "program6.ypp"
                               {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), "*", (yyvsp[0].nt));}
-#line 2031 "program5.tab.cpp"
+#line 2031 "program6.tab.cpp"
     break;
 
   case 88: /* expression: expression DIV expression  */
-#line 365 "program5.ypp"
+#line 365 "program6.ypp"
                               {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), "/", (yyvsp[0].nt));}
-#line 2037 "program5.tab.cpp"
+#line 2037 "program6.tab.cpp"
     break;
 
   case 89: /* expression: expression MOD expression  */
-#line 366 "program5.ypp"
+#line 366 "program6.ypp"
                               {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), "%", (yyvsp[0].nt));}
-#line 2043 "program5.tab.cpp"
+#line 2043 "program6.tab.cpp"
     break;
 
   case 90: /* expression: expression COND_AND expression  */
-#line 367 "program5.ypp"
+#line 367 "program6.ypp"
                                    {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), "&&", (yyvsp[0].nt));}
-#line 2049 "program5.tab.cpp"
+#line 2049 "program6.tab.cpp"
     break;
 
   case 91: /* expression: expression LT expression  */
-#line 368 "program5.ypp"
+#line 368 "program6.ypp"
                              {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), "<", (yyvsp[0].nt));}
-#line 2055 "program5.tab.cpp"
+#line 2055 "program6.tab.cpp"
     break;
 
   case 92: /* expression: expression GT expression  */
-#line 369 "program5.ypp"
+#line 369 "program6.ypp"
                              {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), ">", (yyvsp[0].nt));}
-#line 2061 "program5.tab.cpp"
+#line 2061 "program6.tab.cpp"
     break;
 
   case 93: /* expression: expression LE expression  */
-#line 370 "program5.ypp"
+#line 370 "program6.ypp"
                              {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), "<=", (yyvsp[0].nt));}
-#line 2067 "program5.tab.cpp"
+#line 2067 "program6.tab.cpp"
     break;
 
   case 94: /* expression: expression GE expression  */
-#line 371 "program5.ypp"
+#line 371 "program6.ypp"
                              {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), ">=", (yyvsp[0].nt));}
-#line 2073 "program5.tab.cpp"
+#line 2073 "program6.tab.cpp"
     break;
 
   case 95: /* expression: expression NOT_EQUAL expression  */
-#line 372 "program5.ypp"
+#line 372 "program6.ypp"
                                     {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), "!=", (yyvsp[0].nt));}
-#line 2079 "program5.tab.cpp"
+#line 2079 "program6.tab.cpp"
     break;
 
   case 96: /* expression: expression EQUAL expression  */
-#line 373 "program5.ypp"
+#line 373 "program6.ypp"
                                 {(yyval.nt) = new BinaryExp((yyvsp[-2].nt), "==", (yyvsp[0].nt));}
-#line 2085 "program5.tab.cpp"
+#line 2085 "program6.tab.cpp"
     break;
 
   case 97: /* expression: LPARAM expression RPARAM  */
-#line 374 "program5.ypp"
+#line 374 "program6.ypp"
                              {(yyval.nt) = new ParanExp((yyvsp[-1].nt));}
-#line 2091 "program5.tab.cpp"
+#line 2091 "program6.tab.cpp"
     break;
 
   case 98: /* unaryop: ADD  */
-#line 379 "program5.ypp"
+#line 379 "program6.ypp"
       {(yyval.nt) = new UnaryOp("+");}
-#line 2097 "program5.tab.cpp"
+#line 2097 "program6.tab.cpp"
     break;
 
   case 99: /* unaryop: SUB  */
-#line 380 "program5.ypp"
+#line 380 "program6.ypp"
         {(yyval.nt) = new UnaryOp("-");}
-#line 2103 "program5.tab.cpp"
+#line 2103 "program6.tab.cpp"
     break;
 
   case 100: /* unaryop: NOT  */
-#line 381 "program5.ypp"
+#line 381 "program6.ypp"
         {(yyval.nt) = new UnaryOp("!");}
-#line 2109 "program5.tab.cpp"
+#line 2109 "program6.tab.cpp"
     break;
 
   case 101: /* newexp: ID LPARAM arglist RPARAM  */
-#line 385 "program5.ypp"
+#line 385 "program6.ypp"
                            {
     (yyval.nt) = new Nexp((yyvsp[-3].nt)->getIdent(), (yyvsp[-1].nt));
   }
-#line 2117 "program5.tab.cpp"
+#line 2117 "program6.tab.cpp"
     break;
 
   case 102: /* newexp: ID LPARAM RPARAM  */
-#line 388 "program5.ypp"
+#line 388 "program6.ypp"
                      {
     (yyval.nt) = new Nexp((yyvsp[-2].nt)->getIdent(), new NodeList());
   }
-#line 2125 "program5.tab.cpp"
+#line 2125 "program6.tab.cpp"
     break;
 
   case 103: /* newexp: simpletype  */
-#line 391 "program5.ypp"
+#line 391 "program6.ypp"
                {
     (yyval.nt) = new Nexp((yyvsp[0].nt));
   }
-#line 2133 "program5.tab.cpp"
+#line 2133 "program6.tab.cpp"
     break;
 
   case 104: /* newexp: simpletype newoexpc  */
-#line 394 "program5.ypp"
+#line 394 "program6.ypp"
                         {
     (yyval.nt) = new Nexp((yyvsp[-1].nt), (yyvsp[0].nt), new NodeList());
   }
-#line 2141 "program5.tab.cpp"
+#line 2141 "program6.tab.cpp"
     break;
 
   case 105: /* newexp: simpletype newoexpc OSB CSB  */
-#line 397 "program5.ypp"
+#line 397 "program6.ypp"
                                 {
     Node * lastSq = new NodeList();
     lastSq->push_back(0);
     (yyval.nt) = new Nexp((yyvsp[-3].nt), (yyvsp[-2].nt), lastSq);
   }
-#line 2151 "program5.tab.cpp"
+#line 2151 "program6.tab.cpp"
     break;
 
   case 106: /* newoexpc: OSB expression CSB  */
-#line 405 "program5.ypp"
+#line 405 "program6.ypp"
                       {
     (yyval.nt) = new ExpressionList();
     (yyval.nt)->push_back(new SqExp((yyvsp[-1].nt))); 
   }
-#line 2160 "program5.tab.cpp"
+#line 2160 "program6.tab.cpp"
     break;
 
   case 107: /* newoexpc: newoexpc OSB expression CSB  */
-#line 409 "program5.ypp"
+#line 409 "program6.ypp"
                                 {
     (yyval.nt)->push_back(new SqExp((yyvsp[-1].nt)));
   }
-#line 2168 "program5.tab.cpp"
+#line 2168 "program6.tab.cpp"
     break;
 
 
-#line 2172 "program5.tab.cpp"
+#line 2172 "program6.tab.cpp"
 
       default: break;
     }
@@ -2362,5 +2362,5 @@ yyreturn:
   return yyresult;
 }
 
-#line 415 "program5.ypp"
+#line 415 "program6.ypp"
 

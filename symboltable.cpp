@@ -1,3 +1,10 @@
+/*
+* William Cary
+* symboltable.hpp
+* Program 6, Compilers
+* Dec 14, 2020
+* Contains all different nodes
+*/
 #include <string>
 #include <vector>
 #include <iostream>

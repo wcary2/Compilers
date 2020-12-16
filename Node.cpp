@@ -1,7 +1,7 @@
 /*
 * William Cary
 * Node.cpp
-* Program 4, Compilers
+* Program 6, Compilers
 * Nov 1, 2020
 * Contains all different nodes
 */

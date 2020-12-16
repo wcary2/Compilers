@@ -1,6 +1,6 @@
-#line 2 "program5_lex.cpp"
+#line 2 "program6_lex.cpp"
 
-#line 4 "program5_lex.cpp"
+#line 4 "program6_lex.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -482,20 +482,20 @@ static const flex_int32_t yy_rule_can_match_eol[47] =
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-#line 1 "program5.lpp"
+#line 1 "program6.lpp"
 /* Program3.lpp
  * William Cary
- * Program 3, Compilers
- * October 18, 2020
+ * Program 6, Compilers
+ * Dec 14, 2020
  * FlexLexer (flex scanner)
 */
-#line 9 "program5.lpp"
+#line 9 "program6.lpp"
   #include <iostream>
   #include <iomanip>
   #include <string>
   #include <vector>
   #include "Node.hpp"
-  #include "program5.tab.hpp"
+  #include "program6.tab.hpp"
 
   using std::vector;
   using std::string;
@@ -503,9 +503,9 @@ static const flex_int32_t yy_rule_can_match_eol[47] =
   using std::cerr;
   using std::endl;
 
-#line 507 "program5_lex.cpp"
+#line 507 "program6_lex.cpp"
 
-#line 509 "program5_lex.cpp"
+#line 509 "program6_lex.cpp"
 
 #define INITIAL 0
 #define MULTI_COMMENT 1
@@ -638,9 +638,9 @@ YY_DECL
 		}
 
 	{
-#line 38 "program5.lpp"
+#line 38 "program6.lpp"
 
-#line 644 "program5_lex.cpp"
+#line 644 "program6_lex.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -709,238 +709,238 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 39 "program5.lpp"
+#line 39 "program6.lpp"
 {BEGIN(MULTI_COMMENT);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 40 "program5.lpp"
+#line 40 "program6.lpp"
 {BEGIN(INITIAL);}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 41 "program5.lpp"
+#line 41 "program6.lpp"
 {}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 42 "program5.lpp"
+#line 42 "program6.lpp"
 {}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 43 "program5.lpp"
+#line 43 "program6.lpp"
 {}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 44 "program5.lpp"
+#line 44 "program6.lpp"
 {return INT;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 45 "program5.lpp"
+#line 45 "program6.lpp"
 {return CLASS;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 46 "program5.lpp"
+#line 46 "program6.lpp"
 {return THIS;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 47 "program5.lpp"
+#line 47 "program6.lpp"
 {return COMMA;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 48 "program5.lpp"
+#line 48 "program6.lpp"
 {return LBRACK;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 49 "program5.lpp"
+#line 49 "program6.lpp"
 {return RBRACK;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 50 "program5.lpp"
+#line 50 "program6.lpp"
 {return LPARAM;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 51 "program5.lpp"
+#line 51 "program6.lpp"
 {return RPARAM;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 52 "program5.lpp"
+#line 52 "program6.lpp"
 {return SEMI;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 53 "program5.lpp"
+#line 53 "program6.lpp"
 {return OSB;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 54 "program5.lpp"
+#line 54 "program6.lpp"
 {return CSB;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 55 "program5.lpp"
+#line 55 "program6.lpp"
 {return NLL;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 56 "program5.lpp"
+#line 56 "program6.lpp"
 {return READ;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 57 "program5.lpp"
+#line 57 "program6.lpp"
 {return VOID;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 58 "program5.lpp"
+#line 58 "program6.lpp"
 {return PRINT;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 59 "program5.lpp"
+#line 59 "program6.lpp"
 {return WHILE;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 60 "program5.lpp"
+#line 60 "program6.lpp"
 {return IF;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 61 "program5.lpp"
+#line 61 "program6.lpp"
 {return ELSE;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 62 "program5.lpp"
+#line 62 "program6.lpp"
 {return RET;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 63 "program5.lpp"
+#line 63 "program6.lpp"
 {return NEW;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 64 "program5.lpp"
+#line 64 "program6.lpp"
 {return EQUAL;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 65 "program5.lpp"
+#line 65 "program6.lpp"
 {return ADD;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 66 "program5.lpp"
+#line 66 "program6.lpp"
 {return SUB;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 67 "program5.lpp"
+#line 67 "program6.lpp"
 {return MUL;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 68 "program5.lpp"
+#line 68 "program6.lpp"
 {return DIV;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 69 "program5.lpp"
+#line 69 "program6.lpp"
 {return MOD;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 70 "program5.lpp"
+#line 70 "program6.lpp"
 {return COND_AND;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 71 "program5.lpp"
+#line 71 "program6.lpp"
 {return COND_OR;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 72 "program5.lpp"
+#line 72 "program6.lpp"
 {return LT;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 73 "program5.lpp"
+#line 73 "program6.lpp"
 {return GT;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 74 "program5.lpp"
+#line 74 "program6.lpp"
 {return LE;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 75 "program5.lpp"
+#line 75 "program6.lpp"
 {return GE;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 76 "program5.lpp"
+#line 76 "program6.lpp"
 {return NOT_EQUAL;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 77 "program5.lpp"
+#line 77 "program6.lpp"
 {return NOT;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 78 "program5.lpp"
+#line 78 "program6.lpp"
 {return EQ;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 79 "program5.lpp"
+#line 79 "program6.lpp"
 {return DOT;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 80 "program5.lpp"
+#line 80 "program6.lpp"
 {yylval.nt = new Node(strdup(yytext)); return NUM;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 81 "program5.lpp"
+#line 81 "program6.lpp"
 {yylval.nt = new Node(strdup(yytext)); return ID;}
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 82 "program5.lpp"
+#line 82 "program6.lpp"
 {}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 83 "program5.lpp"
+#line 83 "program6.lpp"
 {}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 85 "program5.lpp"
+#line 85 "program6.lpp"
 ECHO;
 	YY_BREAK
-#line 944 "program5_lex.cpp"
+#line 944 "program6_lex.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(MULTI_COMMENT):
 	yyterminate();
@@ -1913,7 +1913,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 85 "program5.lpp"
+#line 85 "program6.lpp"
 
 
 

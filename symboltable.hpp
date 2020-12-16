@@ -1,10 +1,11 @@
 /*
 * William Cary
 * Node.cpp
-* Program 4, Compilers
-* Nov 25, 2020
+* Program 6, Compilers
+* Dec 14, 2020
 * Contains all different nodes
 */
+
 #ifndef _SYMBOLTABLE_HPP_
 #define _SYMBOLTABLE_HPP_
 #include <string>

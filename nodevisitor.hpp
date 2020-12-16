@@ -1,8 +1,8 @@
 /*
 * William Cary
-* dispatcher.cpp
-* Program 5, Compilers
-* Nov 25, 2020
+* nodevisitor.cpp
+* Program 6, Compilers
+* Dec 14, 2020
 * Contains all different nodes
 */
 #ifndef _NODEVISITOR_HPP_
@@ -122,7 +122,7 @@ class SymbolTableBuilder : protected NodeVisitor {
   // list of the enclosing blocks to check:
   vector<string> enclosingBlocks;
   // the current symbol returned from name
-  vector<tuple<Node *, string>> errorStats;
+  vector<tuple<Node *, string, string, vector<string>>> errorStats;
   // boolean value returned for binary expression
   bool isBool;
   // the types in the arg list 
@@ -131,10 +131,12 @@ class SymbolTableBuilder : protected NodeVisitor {
   int arrNum = 0;
   // method scope
   string methScope = "";
+  bool checking = false;
   int blockCount = 0;
   bool mainfunc = false;
   vector<int> bCount;  // maintains current block
   int checkErrors(); // checks to see if classes not found have been added to the document
+  void checkMissing();
   void printNameError(int r); 
 public:
   SymbolTableBuilder();

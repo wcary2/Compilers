@@ -9,9 +9,6 @@ class A {
   int foo(int r){
     int l;
   }
-  void bar(int r, int r){
-    int l;
-  }
 }
 
 class C {
@@ -22,7 +19,6 @@ class C {
   B hard;
   int d;
   C(){
-    test = A(5);
     a = test.foo();
     b = test.foo(c);
     c = hard.foo();
@@ -30,15 +26,21 @@ class C {
   int binTest() {
     a = test.foo() + test.foo(a);
     b = 2 + a + c;
-    c = test.bar(a, b) + a;
     d = 2 * a * b * c / a / test.foo(a) % 6 - 1;
+    if(hard == null){
+      hard = new B();
+    }
   }
 }
 
 class B {
   int a;
   int b;
-  void foo(){
+  A test;
+  B(){
+    test = new A(a);
+  }
+  int foo(){
     int r; 
   }
 }

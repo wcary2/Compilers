@@ -1,3 +1,11 @@
+/*
+* William Cary
+* symbol.cpp
+* Program 6, Compilers
+* Dec 14, 2020
+* Contains all different nodes
+*/
+
 #include "symbol.hpp"
 
 
